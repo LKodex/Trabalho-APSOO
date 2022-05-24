@@ -27,8 +27,7 @@ CREATE TABLE IF NOT EXISTS Artigos(
 	codigo int PRIMARY KEY,
 	nomeArtigo varchar(100),
 	valorDiario float(53),
-	estoqueTotal int,
-	FOREIGN KEY (codigo) REFERENCES ArtigoLocado (codigo)
+	estoqueTotal int
 );
 CREATE TABLE IF NOT EXISTS ArtigoLocado(
 	id int PRIMARY KEY,
