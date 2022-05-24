@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS Cliente CASCADE;
 CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf char(11) PRIMARY KEY,
 	nome varchar(100)
