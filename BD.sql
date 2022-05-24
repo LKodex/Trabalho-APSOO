@@ -1,39 +1,40 @@
-DROP TABLE IF EXISTS Pessoa CASCADE;
 DROP TABLE IF EXISTS Cliente CASCADE;
-DROP TABLE IF EXISTS Funcionario CASCADE;
-DROP TABLE IF EXISTS Pessoa CASCADE;
-DROP TABLE IF EXISTS Locacao CASCADE;
-DROP TABLE IF EXISTS Artigos CASCADE;
-DROP TABLE IF EXISTS ArtigoLocado CASCADE;
-
-CREATE TABLE Pessoa(
+CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf char(11) PRIMARY KEY,
 	nome varchar(100)
 );
-CREATE TABLE Cliente(
+CREATE TABLE IF NOT EXISTS Cliente(
 	celular char(11),
+	cpf char(11) NOT NULL,
 	FOREIGN KEY(cpf) REFERENCES Pessoa(cpf)
 );
-CREATE TABLE Funcionario(
+CREATE TABLE IF NOT EXISTS Funcionario(
 	senha char(256),
+	cpf char(11) NOT NULL,
 	FOREIGN KEY(cpf) REFERENCES Pessoa(cpf)
 );
-CREATE TABLE Locacao(
+CREATE TABLE IF NOT EXISTS Locacao(
 	id int PRIMARY KEY,
+	cpf char(11) NOT NULL,
 	inicioPrevisto date,
 	fimPrevisto date,
 	dataReservada date,
-	enddereco varchar(255)
+	endereco varchar(255),
+	FOREIGN KEY(cpf) REFERENCES Funcionario(cpf),
+	FOREIGN KEY(cpf) REFERENCES Cliente(cpf)
 );
-CREATE TABLE Artigos(
+CREATE TABLE IF NOT EXISTS Artigos(
 	codigo int PRIMARY KEY,
 	nomeArtigo varchar(100),
 	valorDiario float(53),
 	estoqueTotal int
 );
-CREATE TABLE ArtigoLocado(
+CREATE TABLE IF NOT EXISTS ArtigoLocado(
 	id int,
+	codigo int,
 	quantidade int,
 	valorCotado float(53),
-	valorTotal float(53)
+	valorTotal float(53),
+	FOREIGN KEY (codigo) REFERENCES Artigos (codigo),
+	FOREIGN KEY(id) REFERENCES Locacao(id)
 );
