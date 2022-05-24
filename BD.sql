@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Pessoa(
-	cpf char(11) UNIQUE,
+	cpf char(11) PRIMARY KEY,
 	nome varchar(100),
 	FOREIGN KEY(cpf) REFERENCES Cliente(cpf),
 	FOREIGN KEY(cpf) REFERENCES Funcionario(cpf)
@@ -35,5 +35,7 @@ CREATE TABLE IF NOT EXISTS ArtigoLocado(
 	codigo int PRIMARY KEY,
 	quantidade int,
 	valorCotado float(53),
-	valorTotal float(53)
+	valorTotal float(53),
+	FOREIGN KEY (codigo) REFERENCES Artigos (codigo),
+	FOREIGN KEY(id) REFERENCES Locacao(id)
 );
