@@ -11,7 +11,7 @@ import apsoo.model.Pagamento;
 
 public class SisLoc {
     
-
+/*
     public Cliente buscarCliente(){
         // TODO
     }
@@ -30,5 +30,5 @@ public class SisLoc {
 
     public Pagamento criarPagamento(int id, String metodo, String observacao){
         // TODO
-    }
+    }*/
 }
