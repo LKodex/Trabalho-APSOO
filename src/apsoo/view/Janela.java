@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
 import apsoo.view.layeredPanes.MenuArtigos;
@@ -16,10 +17,12 @@ public class Janela extends JFrame {
     private static final short HEIGHT = 720;
     private short telaAtual = 0;
     private List<JLayeredPane> layeredPanes = new ArrayList<JLayeredPane>();
+    private SisLoc controller;
 
     public Janela(){
         initializeWindow();
         initializeLayeredPanes();
+        this.controller = new SisLoc();
     }
 
     /**
