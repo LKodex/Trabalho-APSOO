@@ -30,11 +30,12 @@ CREATE TABLE IF NOT EXISTS Artigo(
 	estoqueTotal int
 );
 CREATE TABLE IF NOT EXISTS ArtigoLocado(
-	id int PRIMARY KEY,
-	codigo int PRIMARY KEY,
+	id int,
+	codigo int,
 	quantidade int,
 	valorCotado float(53),
 	valorTotal float(53),
 	FOREIGN KEY(codigo) REFERENCES Artigo(codigo),
-	FOREIGN KEY(id) REFERENCES Locacao(id)
+	FOREIGN KEY(id) REFERENCES Locacao(id),
+	PRIMARY KEY (id,codigo)
 );
