@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import apsoo.controller.SisLoc;
+//import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
 import apsoo.view.layeredPanes.MenuArtigos;
@@ -17,12 +17,12 @@ public class Janela extends JFrame {
     private static final short HEIGHT = 720;
     private short telaAtual = 0;
     private List<JLayeredPane> layeredPanes = new ArrayList<JLayeredPane>();
-    private SisLoc controller;
+    //private SisLoc controller;
 
     public Janela(){
+        //this.controller = new SisLoc();
         initializeWindow();
         initializeLayeredPanes();
-        this.controller = new SisLoc();
     }
 
     /**
@@ -35,7 +35,6 @@ public class Janela extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     /**
@@ -49,7 +48,7 @@ public class Janela extends JFrame {
         layeredPanes.add(new CarrinhoArtigos(this));    // 3
         layeredPanes.add(new RegistroPagamento(this));  // 4
 
-        this.setLayeredPane(layeredPanes.get(telaAtual));
+        changeLayeredPane();
     }
 
     /**
@@ -74,6 +73,20 @@ public class Janela extends JFrame {
      * Atualiza a tela para a variável da posição do valor de telaAtual
      */
     private void changeLayeredPane(){
-        this.setLayeredPane(layeredPanes.get(telaAtual));
+        setVisible(false);
+        setLayeredPane(layeredPanes.get(telaAtual));
+        setVisible(true);
+    }
+
+    public int getWidth(){
+        return WIDTH;
+    }
+
+    public int getHeight(){
+        return HEIGHT;
+    }
+
+    public int getTelaAtual(){
+        return telaAtual;
     }
 }
