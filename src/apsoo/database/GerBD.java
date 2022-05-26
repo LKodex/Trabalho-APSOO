@@ -20,7 +20,15 @@ public class GerBD {
     }
 
     public Cliente buscarCliente(String cpf){
-        // TODO
+        ResultSet rs;
+        rs=conexao.select("SELECT * FROM Cliente WHERE cpf ='"+Cliente.cpf+"'");
+        Cliente resultado = null;
+        if(rs.next()){
+                String nome=rs.getString("nome");
+                String celular=rs.getString("celular");
+                resultado=new Cliente(nome,cpf,celular);
+        }
+        return resultado;
     }
 
     public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
