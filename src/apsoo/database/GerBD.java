@@ -2,7 +2,6 @@ package apsoo.database;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import apsoo.model.Artigo;
@@ -83,10 +82,13 @@ public class GerBD {
     
     // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
     public int inserirLocacao(Locacao locacao){
-        int resultado = -1;
-        if(locacao.getInicio().after(locacao.getFim())){ return resultado; }
+        int locacaoId = -1;
+        if(locacao.getInicio().after(locacao.getFim())){ return locacaoId; }
 
-        resultado = conexao.insert(String.format("INSERT INTO Locaco (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES (%s, %s, %s, %s, %s, %s)",
+        List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
+        Pagamento pagamento = locacao.getPagamento();
+
+        locacaoId = conexao.insert(String.format("INSERT INTO Locaco (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES (%s, %s, %s, %s, %s, %s)",
             locacao.getCliente().getCpf(),
             locacao.getFuncionario().getCpf(),
             locacao.getInicio(),
@@ -94,20 +96,26 @@ public class GerBD {
             locacao.getDataReservada(),
             locacao.getEndereco()
         ));
+        
+        inserirPagamento(locacaoId, pagamento);
 
-        if (resultado > 0){
+        for (ArtigoLocado artigoLocado : artigoLocados) {
+            inserirArtigoLocado(locacaoId, artigoLocado);
+        }
+
+        if (locacaoId > 0){
             ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s'",
                 locacao.getCliente().getCpf(),
                 locacao.getFuncionario().getCpf(),
                 locacao.getDataReservada()
             ));
             try {
-                resultado = Integer.parseInt(resultSet.getString("id"));
+                locacaoId = Integer.parseInt(resultSet.getString("id"));
             } catch (Exception e) {
                 System.out.println("Erro ao recuperar o Id da locação recem inserida!");
             }
         }
-        return resultado;
+        return locacaoId;
     }
 
     // Persiste uma instância de artigoLocado no banco de dados

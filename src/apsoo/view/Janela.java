@@ -1,10 +1,11 @@
 package apsoo.view;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
+
+import java.sql.Date;
 
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
@@ -162,19 +163,19 @@ public class Janela extends JFrame {
     }
 
     public Date getDataInicio(){
-        return locacao.getInicio();
+        return new Date(locacao.getInicio().getTime());
     }
 
     public Date getDataFim(){
-        return locacao.getFim();
+        return new Date(locacao.getFim().getTime());
     }
 
     public boolean realizarLocacao(){
         locacao.setCliente(cliente);
         locacao.setFuncionario(funcionario);
-        int locId = controller.cadastrarLocacao(locacao);
-        controller.cadastrarPagamento(pagamento, locId);
-        controller.cadastrarArtigosLocados(listaArtigo, locId);
+        locacao.setPagamento(pagamento);
+        locacao.setArtigoLocados(listaArtigo);
+        controller.cadastrarLocacao(locacao);
         return true;
     }
 

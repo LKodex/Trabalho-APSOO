@@ -60,8 +60,13 @@ public class RegistroPagamento extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getPagamento()){
-                    janela.mostrarMensagem("Locacao cadastrada com sucesso!");
+                boolean pagamentoPreenchdio = janela.getPagamento();
+                if(pagamentoPreenchdio){
+                    if(janela.realizarLocacao()){
+                        janela.mostrarMensagem("Locacao cadastrada com sucesso!");
+                    } else {
+                        janela.mostrarMensagem("Erro ao cadastrar locação");
+                    }
                 } else {
                     janela.mostrarMensagem("Preencha todos os campos");
                 }
@@ -114,6 +119,6 @@ public class RegistroPagamento extends AJanelaLayer {
     }
 
     public String getInfo() {
-        return ((JTextFieldPlaceholder) components.get("infoAdicional")).getText();
+        return ((JTextAreaPlaceholder) components.get("infoAdicional")).getText();
     }
 }
