@@ -8,6 +8,7 @@ import java.util.List;
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
 import apsoo.model.Cliente;
+import apsoo.model.Funcionario;
 import apsoo.model.Locacao;
 import apsoo.model.Pagamento;
 
@@ -30,8 +31,8 @@ public class GerBD {
         Cliente cliente = null;
 
         try {
-            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf = '%s'", cpf));
-            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
+            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf LIKE '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
 
             if(clienteResultSet.next() && pessoaResultSet.next()){
                 cliente = new Cliente(pessoaResultSet.getString("nome"), cpf, clienteResultSet.getString("celular"));
@@ -40,6 +41,24 @@ public class GerBD {
             System.out.println("Não foi possível recuperar um cliente ou pessoa do banco de dados! Retornando null");
         }
         return cliente;
+    }
+
+    public Funcionario buscarFuncionario(String cpf) {
+        ResultSet funcionarioResultSet = null;
+        ResultSet pessoaResultSet = null;
+        Funcionario funcionario = null;
+
+        try {
+            funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf LIKE '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
+
+            if(funcionarioResultSet.next() && pessoaResultSet.next()){
+                funcionario = new Funcionario(pessoaResultSet.getString("nome"), cpf, funcionarioResultSet.getString("senha"), 0.0);
+            }
+        } catch (Exception e) {
+            System.out.println("Não foi possível recuperar um funcionario ou pessoa do banco de dados! Retornando null");
+        }
+        return funcionario;
     }
 
     public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
@@ -77,7 +96,7 @@ public class GerBD {
         ));
 
         if (resultado > 0){
-            ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente = '%s' AND cpfFuncionario = '%s' AND dataReservada = '%s'",
+            ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s'",
                 locacao.getCliente().getCpf(),
                 locacao.getFuncionario().getCpf(),
                 locacao.getDataReservada()

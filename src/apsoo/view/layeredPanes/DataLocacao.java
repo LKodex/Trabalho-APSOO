@@ -38,6 +38,9 @@ public class DataLocacao extends AJanelaLayer {
 
         components.put("dataFim", new JTextFieldPlaceholder("Data de Fim (DD/MM/AAAA)"));
         components.get("dataFim").setBounds(465, 270, 350, 35);
+
+        components.put("endereco", new JTextFieldPlaceholder("Endereço"));
+        components.get("endereco").setBounds(465, 320, 350, 35);
         
         // Footer
         components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 2, 5), SwingConstants.CENTER));
@@ -56,7 +59,11 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.nextScreen();
+                if(janela.getDatasEndereco()){
+                    janela.nextScreen();
+                } else {
+                    janela.mostrarMensagem("Algo deu errado! Por favor preencha todos os campos e insira uma data de inicio anterior á final");
+                }
             }
         });
 
@@ -101,5 +108,9 @@ public class DataLocacao extends AJanelaLayer {
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
+    }
+
+    public String getEndereco() {
+        return ((JTextFieldPlaceholder) components.get("endereco")).getText();
     }
 }

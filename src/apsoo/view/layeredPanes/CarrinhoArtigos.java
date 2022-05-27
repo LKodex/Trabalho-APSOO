@@ -55,7 +55,11 @@ public class CarrinhoArtigos extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.nextScreen();
+                if(janela.getArtigoLocados()){
+                    janela.nextScreen();
+                } else {
+                    janela.mostrarMensagem("Houve um erro :)");
+                }
             }
         });
 

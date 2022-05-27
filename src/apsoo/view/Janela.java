@@ -8,8 +8,11 @@ import javax.swing.*;
 
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
+import apsoo.model.Cliente;
+import apsoo.model.Funcionario;
+import apsoo.model.Locacao;
 import apsoo.model.Pagamento;
-//import apsoo.controller.SisLoc;
+import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
 import apsoo.view.layeredPanes.MenuArtigos;
@@ -21,10 +24,16 @@ public class Janela extends JFrame {
     private static final short HEIGHT = 720;
     private short telaAtual = 0;
     private List<AJanelaLayer> layeredPanes = new ArrayList<AJanelaLayer>();
-    //private SisLoc controller;
+    private SisLoc controller;
+
+    private Locacao locacao;
+    private Pagamento pagamento;
+    private List<ArtigoLocado> listaArtigo;
+    private Funcionario funcionario;
+    private Cliente cliente;
 
     public Janela(){
-        //this.controller = new SisLoc();
+        this.controller = new SisLoc();
         initializeWindow();
         initializeLayeredPanes();
     }
@@ -96,28 +105,50 @@ public class Janela extends JFrame {
         return telaAtual;
     }
 
-    public String getClienteCpf(){
-        return ((TelaInicial) layeredPanes.get(0)).getClienteCpf();
+    // Passo 1/5
+    public boolean getClienteFuncionario(){
+        cliente = null;
+        funcionario = null;
+
+        cliente = controller.buscarCliente(((TelaInicial) layeredPanes.get(0)).getClienteCpf());
+        funcionario = controller.buscarFuncionario(((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf());
+
+        return cliente != null && funcionario != null;
     }
 
-    public String getFuncionarioCpf(){
-        return ((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf();
+    // Passo 2/5
+    public boolean getDatasEndereco(){
+        locacao = null;
+        locacao = new Locacao(
+            ((DataLocacao) layeredPanes.get(1)).getDataInicio(),
+            ((DataLocacao) layeredPanes.get(1)).getDataFim(),
+            ((DataLocacao) layeredPanes.get(1)).getEndereco()
+            );
+        return locacao != null && ((DataLocacao) layeredPanes.get(1)).getDataInicio().before(((DataLocacao) layeredPanes.get(1)).getDataFim());
     }
 
-    public Date getDataInicio(){
-        return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+    // Passo 4/5
+    public boolean getArtigoLocados(){
+        listaArtigo = ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
+        if (listaArtigo.size() <= 0) {
+            listaArtigo = null;
+            return false;
+        }
+        return true;
     }
 
-    public Date getDataFim(){
-        return ((DataLocacao) layeredPanes.get(1)).getDataFim();
+    public boolean getPagamento(){
+        pagamento = null;
+        pagamento = new Pagamento(
+            ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento(),
+            ((RegistroPagamento) layeredPanes.get(4)).getForma(),
+            ((RegistroPagamento) layeredPanes.get(4)).getInfo()
+        );
+        return pagamento != null;
     }
 
-    public List<ArtigoLocado> getArtigoLocados(){
+    public List<ArtigoLocado> getListaArtigo(){
         return ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
-    }
-
-    public Pagamento getPagamento(){
-        return ((RegistroPagamento) layeredPanes.get(4)).getPagamento();
     }
 
     public List<Artigo> getArtigosSelecionados(){
@@ -126,5 +157,26 @@ public class Janela extends JFrame {
 
     public void mostrarMensagem(String mensagem){
         JOptionPane.showMessageDialog(this, mensagem, "Resultado", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public Date getDataInicio(){
+        return locacao.getInicio();
+    }
+
+    public Date getDataFim(){
+        return locacao.getFim();
+    }
+
+    public boolean realizarLocacao(){
+        locacao.setCliente(cliente);
+        locacao.setFuncionario(funcionario);
+        int locId = controller.cadastrarLocacao(locacao);
+        controller.cadastrarPagamento(pagamento, locId);
+        controller.cadastrarArtigosLocados(listaArtigo, locId);
+        return true;
+    }
+
+    public SisLoc getController(){
+        return controller;
     }
 }
