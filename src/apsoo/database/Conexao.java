@@ -27,11 +27,19 @@ public class Conexao {
     public static Conexao getInstance(){
         if(instance == null) instance = new Conexao();
         return instance;
-    }/*
+    }
 
     public String insert(String sqlCommand){
-        // TODO
-    }*/
+        try{
+            Connection con=DriverManager.getConnection(url, username, password);
+            Statement st=con.createStatement();
+            st.executeQuery(sqlCommand);
+            return "Inserção bem sucedida";
+        }
+        catch(SQLException e){
+            return "Houve um erro ao inserir";
+        }
+    }
 
     public ResultSet select(String sqlCommand){
         try {
@@ -45,19 +53,28 @@ public class Conexao {
             e.printStackTrace();
             return null;
         }
-        
-        /*PreparedStatement p;
-        ResultSet rs;
-        p = connection.prepareStatement(sqlCommand);
-        rs=p.executeQuery();
-        return rs;*/
     }
-/*
     public String update(String sqlCommand){
-        // TODO
+        try{
+            Connection con=DriverManager.getConnection(url, username, password);
+            Statement st=con.createStatement();
+            st.executeQuery(sqlCommand);
+            return "O item foi atualizado com sucesso";
+        }
+        catch(SQLException e){
+            return "Houve um erro ao atualizar";
+        }
     }
 
     public String delete(String sqlCommand){
-        // TODO
-    }*/
+        try{
+            Connection con=DriverManager.getConnection(url, username, password);
+            Statement st=con.createStatement();
+            st.executeQuery(sqlCommand);
+            return "O item foi apagado com sucesso";
+        }
+        catch(SQLException e){
+            return "Houve um erro ao apagar o item";
+        }
+    }
 }

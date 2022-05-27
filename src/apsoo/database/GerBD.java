@@ -2,6 +2,7 @@ package apsoo.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,10 +28,14 @@ public class GerBD {
         Cliente resultado = null;
         try {
             if(rs.next()){
-                String nome;
+                String nome="";
                 try {
-                    nome = rs.getString("nome");
                     String celular=rs.getString("celular");
+
+                    ResultSet rs2=con.select("Select * FROM pessoa WHERE cpf='"+cpf+"'");
+                    if(rs2.next()){
+                        nome=rs2.getString("nome");
+                    }
                     resultado=new Cliente(nome,cpf,celular);
                     return resultado;
                 } catch (SQLException e) {
@@ -44,16 +49,40 @@ public class GerBD {
         }
         return resultado;
     }
-/*
     public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
-        // TODO
+        List<Artigo> lista=new ArrayList<Artigo>();
+        List<Integer> codigos=new ArrayList<>();
+        ResultSet rs,rs2;
+        rs=con.select("SELECT codigo FROM artigoLocado WHERE inicioLocacao = '"+inicioLocacao+"' AND fimLocacao = '"+fimLocacao+"'");
+        try {
+            while(rs.next()){
+                int e=rs.getInt("codigo");
+                codigos.add(e);
+            }
+            for(Integer codigo:codigos){
+                rs2=con.select("SELECT FROM artigo WHERE codigo = "+codigo+"'");
+                int cod=rs2.getInt("codigo");
+                String nome=rs2.getString("nome");
+                double valor=rs2.getDouble("valorDiaria");
+                int estoque=rs2.getInt("estoqueTotal");
+                Artigo throwaway=new Artigo(cod,nome,valor,estoque);
+                lista.add(throwaway);
+            }
+            return lista;
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
     }
-
+    /*
     public String inserirLocacao(Locacao locacao){
         // TODO
     }
-
+    */
     public String atualizarQuantidade(Artigo artigo){
-        // TODO
-    }*/
+        String resultado;
+        resultado=con.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"'");
+        return resultado;
+    }
 }

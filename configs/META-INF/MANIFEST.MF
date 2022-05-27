@@ -1,1 +1,1 @@
-Class-Path: lib/postgresql-42.3.4.jar
+Class-Path: lib/postgresql-42.3.5.jar
