@@ -35,17 +35,17 @@ public class SisLoc {
 
     // CONSULTA
     public Cliente buscarCliente(String cpf){
-        if(cpf.replace("[^0-9]", "").length() != 11) return null;
+        //if(cpf.replace("[^0-9]", "").length() != 11) return null;
         return db.buscarCliente(cpf.replace("[^0-9]", ""));
     }
 
     public Funcionario buscarFuncionario(String cpf){
-        if(cpf.replace("[^0-9]", "").length() != 11) return null;
+        //if(cpf.replace("[^0-9]", "").length() != 11) return null;
         return db.buscarFuncionario(cpf.replace("[^0-9]", ""));
     }
 
-    public List<Artigo> consultarArtigosDisponiveis(Date dataInicio, Date dataFim){
-        return db.buscarArtigos(dataInicio, dataFim);
+    public List<Artigo> consultarArtigosDisponiveis(){
+        return db.buscarArtigos();
     }
 
     // PERSISTENCIA

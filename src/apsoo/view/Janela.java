@@ -119,12 +119,14 @@ public class Janela extends JFrame {
     // Passo 2/5
     public boolean getDatasEndereco(){
         locacao = null;
+        Date dataInicio = ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+        Date dataFim = ((DataLocacao) layeredPanes.get(1)).getDataFim();
         locacao = new Locacao(
-            ((DataLocacao) layeredPanes.get(1)).getDataInicio(),
-            ((DataLocacao) layeredPanes.get(1)).getDataFim(),
+            dataInicio,
+            dataFim,
             ((DataLocacao) layeredPanes.get(1)).getEndereco()
             );
-        return locacao != null && ((DataLocacao) layeredPanes.get(1)).getDataInicio().before(((DataLocacao) layeredPanes.get(1)).getDataFim());
+        return locacao != null && dataInicio.before(dataFim);
     }
 
     // Passo 4/5

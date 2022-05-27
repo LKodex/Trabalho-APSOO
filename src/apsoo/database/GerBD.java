@@ -31,8 +31,8 @@ public class GerBD {
         Cliente cliente = null;
 
         try {
-            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf LIKE '%s'", cpf));
-            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
+            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf = '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
 
             if(clienteResultSet.next() && pessoaResultSet.next()){
                 cliente = new Cliente(pessoaResultSet.getString("nome"), cpf, clienteResultSet.getString("celular"));
@@ -49,8 +49,8 @@ public class GerBD {
         Funcionario funcionario = null;
 
         try {
-            funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf LIKE '%s'", cpf));
-            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
+            funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf = '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
 
             if(funcionarioResultSet.next() && pessoaResultSet.next()){
                 funcionario = new Funcionario(pessoaResultSet.getString("nome"), cpf, funcionarioResultSet.getString("senha"), 0.0);
@@ -61,7 +61,7 @@ public class GerBD {
         return funcionario;
     }
 
-    public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
+    public List<Artigo> buscarArtigos(){
         List<Artigo> listaArtigos = new ArrayList<Artigo>();
         try {
             ResultSet resultSet = conexao.select("SELECT * FROM Artigo");

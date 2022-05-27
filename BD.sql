@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf char(11) PRIMARY KEY,
-	nome varchar(100),
+	nome varchar(100)
 );
 CREATE TABLE IF NOT EXISTS Cliente(
 	cpf char(11) PRIMARY KEY,
