@@ -152,9 +152,9 @@ public class GerBD {
             return conexao.update(String.format("UPDATE Artigo SET estoqueTotal = '%d' WHERE codigo ='%d'",
                 quantidadeAtual - artigoLocado.getQuantidade(),
                 artigoLocado.getCodigo()
-            ));
+            );
         } catch (Exception e) {
-            System.out.println("Erro ao recuperar a qauntidade de estoque de artigo!");
+            System.out.println("Erro ao recuperar a quantidade de estoque de artigo!");
             return -1;
         }
     }
