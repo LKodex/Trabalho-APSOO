@@ -30,7 +30,7 @@ public class Janela extends JFrame {
      */
     private void initializeWindow(){
         setSize(WIDTH, HEIGHT);
-        setTitle("Cadastro de Cliente");
+        setTitle("Realizar Locação");
         setLayout(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,7 +55,7 @@ public class Janela extends JFrame {
      * Avança para a próxima tela na lista caso não esteja na última
      */
     public void nextScreen(){
-        if(telaAtual >= layeredPanes.size()) return;
+        if(telaAtual >= layeredPanes.size() - 1) return;
         telaAtual++;
         changeLayeredPane();
     }

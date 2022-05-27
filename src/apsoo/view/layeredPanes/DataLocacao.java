@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import apsoo.view.Janela;
+import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class DataLocacao extends JLayeredPane {
     private Janela janela;
@@ -26,8 +27,19 @@ public class DataLocacao extends JLayeredPane {
     }
 
     private void initializeComponents(){
+        components.put("lblDataLocacao", new JLabel("Informações da Locação", SwingConstants.CENTER));
+        components.get("lblDataLocacao").setBounds(465, 170, 350, 35);
+        ((JLabel) components.get("lblDataLocacao")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblDataLocacao").setFont(new Font("Arial", Font.BOLD, 22));
+        
+        components.put("dataInicio", new JTextFieldPlaceholder("Data de Inicio (DD/MM/AAAA)"));
+        components.get("dataInicio").setBounds(465, 220, 350, 35);
+
+        components.put("dataFim", new JTextFieldPlaceholder("Data de Fim (DD/MM/AAAA)"));
+        components.get("dataFim").setBounds(465, 270, 350, 35);
+        
         // Footer
-        components.put("lblFooter", new JLabel(String.format("<html>%d/%d<br/>&#0;</html>", 2, 5), SwingConstants.CENTER));
+        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 2, 5), SwingConstants.CENTER));
         components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
         components.get("lblFooter").setBounds(0, janela.getHeight() - 159, janela.getWidth(), 120);
         components.get("lblFooter").setOpaque(true);
@@ -47,7 +59,7 @@ public class DataLocacao extends JLayeredPane {
             }
         });
 
-        // Botão Cancelar
+        // Botão Voltar
         components.put("btnAnterior", new JButton("VOLTAR"));
         components.get("btnAnterior").setBounds((int)((janela.getWidth() - 200) * 0.13), janela.getHeight() - 139, 200, 80);
         components.get("btnAnterior").setBackground(new Color(186, 186, 186));
