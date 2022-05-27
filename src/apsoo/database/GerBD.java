@@ -77,7 +77,7 @@ public class GerBD {
         String resultado;
         resultado=con.insert("INSERT INTO Locacao (dataReservada,inicio,fim,endereco) VALUES ('"+locacao.getDataReservada()+"','"+locacao.getInicio()+"','"+locacao.getFim()+"','"+locacao.getEndereco()+"'");
         resultado=con.insert("INSERT INTO Locacao (cpfFuncionario)VALUES('"+locacao.funcionario.getCpf+"'");
-        resultado=con.insert("INSERT INTO Locacao (cpfCliente)VALUES('"+locacao.cliente.getCpf+"'")
+        resultado=con.insert("INSERT INTO Locacao (cpfCliente)VALUES('"+locacao.cliente.getCpf+"'");
     }
     public String atualizarQuantidade(Artigo artigo){
         String resultado;
