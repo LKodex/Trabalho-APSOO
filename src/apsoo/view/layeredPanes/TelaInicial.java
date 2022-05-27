@@ -57,6 +57,7 @@ public class TelaInicial extends AJanelaLayer {
             public void actionPerformed(ActionEvent event){
                 if(janela.getClienteFuncionario()){
                     janela.nextScreen();
+                    janela.mostrarClienteEFuncionario();
                 } else {
                     janela.mostrarMensagem("Usuário ou Funcionário não encontrado!");
                 }

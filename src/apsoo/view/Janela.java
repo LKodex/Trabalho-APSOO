@@ -182,4 +182,18 @@ public class Janela extends JFrame {
     public SisLoc getController(){
         return controller;
     }
+
+    public void mostrarClienteEFuncionario() {
+        mostrarMensagem(String.format("Cliente = %s\nFuncionário = %s", cliente.getNome(), funcionario.getNome()));
+    }
+
+    public void mostrarLocacao(){
+        mostrarMensagem(String.format("Locado com sucesso!\nId = %d\nReservado em = %s\nInicio em = %s\nFim em = %s\nEndereco = %s\n",
+            locacao.getId(),
+            locacao.getDataReservada(),
+            locacao.getInicio(),
+            locacao.getFim(),
+            locacao.getEndereco()
+        ));
+    }
 }

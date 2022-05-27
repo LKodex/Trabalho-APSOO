@@ -63,7 +63,7 @@ public class RegistroPagamento extends AJanelaLayer {
                 boolean pagamentoPreenchdio = janela.getPagamento();
                 if(pagamentoPreenchdio){
                     if(janela.realizarLocacao()){
-                        janela.mostrarMensagem("Locacao cadastrada com sucesso!");
+                        janela.mostrarLocacao();
                     } else {
                         janela.mostrarMensagem("Erro ao cadastrar locação");
                     }
