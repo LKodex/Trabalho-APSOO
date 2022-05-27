@@ -51,20 +51,14 @@ public class GerBD {
     }
     public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
         List<Artigo> lista=new ArrayList<Artigo>();
-        List<Integer> codigos=new ArrayList<>();
-        ResultSet rs,rs2;
-        rs=con.select("SELECT codigo FROM artigoLocado WHERE inicioLocacao = '"+inicioLocacao+"' AND fimLocacao = '"+fimLocacao+"'");
+        ResultSet rs;
         try {
+            rs=con.select("SELECT * FROM artigo");
             while(rs.next()){
-                int e=rs.getInt("codigo");
-                codigos.add(e);
-            }
-            for(Integer codigo:codigos){
-                rs2=con.select("SELECT FROM artigo WHERE codigo = "+codigo+"'");
-                int cod=rs2.getInt("codigo");
-                String nome=rs2.getString("nome");
-                double valor=rs2.getDouble("valorDiaria");
-                int estoque=rs2.getInt("estoqueTotal");
+                int cod=rs.getInt("codigo");
+                String nome=rs.getString("nome");
+                double valor=rs.getDouble("valorDiaria");
+                int estoque=rs.getInt("estoqueTotal");
                 Artigo throwaway=new Artigo(cod,nome,valor,estoque);
                 lista.add(throwaway);
             }
@@ -75,14 +69,19 @@ public class GerBD {
             return null;
         }
     }
-    /*
+    
     public String inserirLocacao(Locacao locacao){
-        // TODO
+        if(locacao.getInicio().after(locacao.getFim())){
+            return "Datas invalidas";
+        }
+        String resultado;
+        resultado=con.insert("INSERT INTO Locacao (dataReservada,inicio,fim,endereco) VALUES ('"+locacao.getDataReservada()+"','"+locacao.getInicio()+"','"+locacao.getFim()+"','"+locacao.getEndereco()+"'");
+        resultado=con.insert("INSERT INTO Locacao (cpfFuncionario)VALUES('"+locacao.funcionario.getCpf+"'");
+        resultado=con.insert("INSERT INTO Locacao (cpfCliente)VALUES('"+locacao.cliente.getCpf+"'")
     }
-    */
     public String atualizarQuantidade(Artigo artigo){
         String resultado;
-        resultado=con.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"'");
+        resultado=con.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"' WHERE codigo ='"+artigo.getCodigo()+"'");
         return resultado;
     }
 }

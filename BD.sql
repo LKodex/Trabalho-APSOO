@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Funcionario(
 	FOREIGN KEY(cpf) REFERENCES Pessoa(cpf)
 );
 CREATE TABLE IF NOT EXISTS Locacao(
-	id int PRIMARY KEY,
+	id int SERIAL PRIMARY KEY,
 	cpfCliente char(11) NOT NULL,
 	cpfFuncionario char(11) NOT NULL,
 	inicioPrevisto date,
