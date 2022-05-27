@@ -2,7 +2,6 @@ package apsoo.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -29,52 +28,51 @@ public class Conexao {
         return instance;
     }
 
-    public String insert(String sqlCommand){
+    public int insert(String sqlCommand){
+        int result = -1;
         try{
-            Connection con=DriverManager.getConnection(url, username, password);
-            Statement st=con.createStatement();
-            st.executeQuery(sqlCommand);
-            return "Inserção bem sucedida";
+            Connection connection = DriverManager.getConnection(url, username, password);
+            Statement statement = connection.createStatement();
+            result = statement.executeUpdate(sqlCommand);
         }
         catch(SQLException e){
-            return "Houve um erro ao inserir";
+            System.out.println("Erro ao executar comando SQL de Inserção! Retornando -1");
         }
+        return result;
     }
 
     public ResultSet select(String sqlCommand){
-        try {
-            Connection con=DriverManager.getConnection(url, username, password);
-            PreparedStatement p=con.prepareStatement(sqlCommand);
-            ResultSet rs=p.executeQuery();
-            con.close();
-            return rs;
+        ResultSet resultSet = null;
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery(sqlCommand);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+            System.out.println("Erro ao executar comando SQL de Seleção! Retornando null");
         }
-    }
-    public String update(String sqlCommand){
-        try{
-            Connection con=DriverManager.getConnection(url, username, password);
-            Statement st=con.createStatement();
-            st.executeQuery(sqlCommand);
-            return "O item foi atualizado com sucesso";
-        }
-        catch(SQLException e){
-            return "Houve um erro ao atualizar";
-        }
+        return resultSet;
     }
 
-    public String delete(String sqlCommand){
-        try{
-            Connection con=DriverManager.getConnection(url, username, password);
-            Statement st=con.createStatement();
-            st.executeQuery(sqlCommand);
-            return "O item foi apagado com sucesso";
+    public int update(String sqlCommand){
+        int result = -1;
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Statement statement = connection.createStatement();
+            result = statement.executeUpdate(sqlCommand);
         }
         catch(SQLException e){
-            return "Houve um erro ao apagar o item";
+            System.out.println("Erro ao executar comando SQL de Atualização! Retornando -1");
         }
+        return result;
+    }
+
+    public int delete(String sqlCommand){
+        int result = -1;
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Statement statement = connection.createStatement();
+            result = statement.executeUpdate(sqlCommand);
+        }
+        catch(SQLException e){
+            System.out.println("Erro ao executar comando SQL de Deleção! Retornando -1");
+        }
+        return result;
     }
 }

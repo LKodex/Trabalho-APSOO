@@ -1,20 +1,22 @@
 package apsoo.database;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import apsoo.model.Artigo;
+import apsoo.model.ArtigoLocado;
 import apsoo.model.Cliente;
 import apsoo.model.Locacao;
+import apsoo.model.Pagamento;
 
 public class GerBD {
     private static GerBD instance;
-    Conexao con;
+    private Conexao conexao;
+
     private GerBD(){
-        con=Conexao.getInstance();
+        conexao = Conexao.getInstance();
     }
 
     public static GerBD getInstance(){
@@ -23,65 +25,110 @@ public class GerBD {
     }
 
     public Cliente buscarCliente(String cpf){
-        ResultSet rs;
-        rs=con.select("SELECT * FROM Cliente WHERE cpf ='"+cpf+"'");
-        Cliente resultado = null;
-        try {
-            if(rs.next()){
-                String nome="";
-                try {
-                    String celular=rs.getString("celular");
+        ResultSet clienteResultSet = null;
+        ResultSet pessoaResultSet = null;
+        Cliente cliente = null;
 
-                    ResultSet rs2=con.select("Select * FROM pessoa WHERE cpf='"+cpf+"'");
-                    if(rs2.next()){
-                        nome=rs2.getString("nome");
-                    }
-                    resultado=new Cliente(nome,cpf,celular);
-                    return resultado;
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return resultado;
-    }
-    public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
-        List<Artigo> lista=new ArrayList<Artigo>();
-        ResultSet rs;
         try {
-            rs=con.select("SELECT * FROM artigo");
-            while(rs.next()){
-                int cod=rs.getInt("codigo");
-                String nome=rs.getString("nome");
-                double valor=rs.getDouble("valorDiaria");
-                int estoque=rs.getInt("estoqueTotal");
-                Artigo throwaway=new Artigo(cod,nome,valor,estoque);
-                lista.add(throwaway);
+            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf = '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
+
+            if(clienteResultSet.next() && pessoaResultSet.next()){
+                cliente = new Cliente(pessoaResultSet.getString("nome"), cpf, clienteResultSet.getString("celular"));
             }
-            return lista;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+        } catch (Exception e) {
+            System.out.println("Não foi possível recuperar um cliente ou pessoa do banco de dados! Retornando null");
         }
+        return cliente;
+    }
+
+    public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
+        List<Artigo> listaArtigos = new ArrayList<Artigo>();
+        try {
+            ResultSet resultSet = conexao.select("SELECT * FROM Artigo");
+            while(resultSet.next()){
+                Artigo artigo = new Artigo(
+                    Integer.parseInt(resultSet.getString("codigo")),
+                    resultSet.getString("nomeArtigo"),
+                    Double.parseDouble(resultSet.getString("valorDiario")),
+                    Integer.parseInt(resultSet.getString("estoqueTotal"))
+                );
+
+                listaArtigos.add(artigo);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar artigos!");
+        }
+        return listaArtigos;
     }
     
-    public String inserirLocacao(Locacao locacao){
-        if(locacao.getInicio().after(locacao.getFim())){
-            return "Datas invalidas";
+    // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
+    public int inserirLocacao(Locacao locacao){
+        int resultado = -1;
+        if(locacao.getInicio().after(locacao.getFim())){ return resultado; }
+
+        resultado = conexao.insert(String.format("INSERT INTO Locaco (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES (%s, %s, %s, %s, %s, %s)",
+            locacao.getCliente().getCpf(),
+            locacao.getFuncionario().getCpf(),
+            locacao.getInicio(),
+            locacao.getFim(),
+            locacao.getDataReservada(),
+            locacao.getEndereco()
+        ));
+
+        if (resultado > 0){
+            ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente = '%s' AND cpfFuncionario = '%s' AND dataReservada = '%s'",
+                locacao.getCliente().getCpf(),
+                locacao.getFuncionario().getCpf(),
+                locacao.getDataReservada()
+            ));
+            try {
+                resultado = Integer.parseInt(resultSet.getString("id"));
+            } catch (Exception e) {
+                System.out.println("Erro ao recuperar o Id da locação recem inserida!");
+            }
         }
-        String resultado;
-        resultado=con.insert("INSERT INTO Locacao (dataReservada,inicio,fim,endereco) VALUES ('"+locacao.getDataReservada()+"','"+locacao.getInicio()+"','"+locacao.getFim()+"','"+locacao.getEndereco()+"'");
-        resultado=con.insert("INSERT INTO Locacao (cpfFuncionario)VALUES('"+locacao.funcionario.getCpf+"'");
-        resultado=con.insert("INSERT INTO Locacao (cpfCliente)VALUES('"+locacao.cliente.getCpf+"'");
-    }
-    public String atualizarQuantidade(Artigo artigo){
-        String resultado;
-        resultado=con.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"' WHERE codigo ='"+artigo.getCodigo()+"'");
         return resultado;
+    }
+
+    // Persiste uma instância de artigoLocado no banco de dados
+    public boolean inserirArtigoLocado(int locacaoId, ArtigoLocado artigoLocado){
+        int resultado = conexao.insert(String.format("INSERT INTO ArtigoLocado (id, codigo, quantidade, valorCotado, valorTotal) VALUES ('%d', '%d', '%d', '%.2f', '%.2f')",
+            locacaoId,
+            artigoLocado.getCodigo(),
+            artigoLocado.getQuantidade(),
+            artigoLocado.getValorDiaria(),
+            artigoLocado.getValorTotal()
+        ));
+        atualizarQuantidade(artigoLocado);
+        return resultado > 0;
+    }
+
+    // Persiste uma instância de pagamento no banco de dados
+    public boolean inserirPagamento(int locacaoId, Pagamento pagamento){
+        int resultado = conexao.insert(String.format("INSERT INTO Pagamento (id, locId, formaPagamento, info) VALUES ('%s', '%d', '%s', '%s')",
+            pagamento.getId(),
+            locacaoId,
+            pagamento.getMetodo(),
+            pagamento.getObservacao()
+        ));
+        return resultado > 0;
+    }
+
+    public int atualizarQuantidade(ArtigoLocado artigoLocado){
+        int quantidadeAtual;
+        try {
+            quantidadeAtual = Integer.parseInt(conexao.select(String.format("SELECT estoqueTotal FROM Artigo WHERE codigo = '%d'",
+                artigoLocado.getCodigo()
+            )).getString("estoqueTotal"));
+
+            return conexao.update(String.format("UPDATE Artigo SET estoqueTotal = '%d' WHERE codigo ='%d'",
+                quantidadeAtual - artigoLocado.getQuantidade(),
+                artigoLocado.getCodigo()
+            ));
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar a qauntidade de estoque de artigo!");
+            return -1;
+        }
     }
 }

@@ -39,3 +39,11 @@ CREATE TABLE IF NOT EXISTS ArtigoLocado(
 	FOREIGN KEY(id) REFERENCES Locacao(id),
 	PRIMARY KEY (id,codigo)
 );
+CREATE TABLE IF NOT EXISTS Pagamento(
+	id varchar(255),
+	locId int,
+	formaPagamento varchar(255),
+	info varchar(255),
+	FOREIGN KEY (locId) REFERENCES Locacao(id),
+	PRIMARY KEY (id, locId)
+)
