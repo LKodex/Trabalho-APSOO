@@ -1,6 +1,7 @@
 package apsoo.model;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class Locacao {
@@ -15,14 +16,14 @@ public class Locacao {
     private List<ArtigoLocado> artigoLocados;
 
     public Locacao(Date inicio, Date fim, String endereco){
-        this.dataReservada = new Date();
+        dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;
     }
 
     public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento){
-        this.dataReservada = new Date();
+        dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;
@@ -32,7 +33,7 @@ public class Locacao {
     }
 
     public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento, List<ArtigoLocado> artigoLocados){
-        this.dataReservada = new Date();
+        dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;

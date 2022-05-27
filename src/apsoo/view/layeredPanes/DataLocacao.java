@@ -88,7 +88,7 @@ public class DataLocacao extends AJanelaLayer {
     public Date getDataInicio(){
         Date dataInicio = null;
         try {
-            dataInicio = new Date(new SimpleDateFormat("dd-MM-YYYY").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime());
+            dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime());
         } catch (Exception e) {
             System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null");
         }
@@ -98,7 +98,7 @@ public class DataLocacao extends AJanelaLayer {
     public Date getDataFim(){
         Date dataFim = null;
         try {
-            dataFim = new Date(new SimpleDateFormat("dd-MM-YYYY").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime());
+            dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime());
         } catch (Exception e) {
             System.out.println("Não foi possível criar uma instância de data do fim! Retornando null");
         }

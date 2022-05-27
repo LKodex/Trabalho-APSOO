@@ -1,6 +1,7 @@
 package apsoo.database;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class GerBD {
         List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
         Pagamento pagamento = locacao.getPagamento();
 
-        locacaoId = conexao.insert(String.format("INSERT INTO Locaco (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES (%s, %s, %s, %s, %s, %s)",
+        conexao.insert(String.format("INSERT INTO Locacao (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
             locacao.getCliente().getCpf(),
             locacao.getFuncionario().getCpf(),
             locacao.getInicio(),
@@ -96,6 +97,20 @@ public class GerBD {
             locacao.getDataReservada(),
             locacao.getEndereco()
         ));
+
+        ResultSet loc = conexao.select(String.format("SELECT (id) FROM Locacao WHERE cpfCliente='%s' AND cpfFuncionario='%s' AND dataReservada = '%s'",
+            locacao.getCliente().getCpf(),
+            locacao.getFuncionario().getCpf(),
+            locacao.getDataReservada()
+        ));
+
+        try {
+            if(loc.next()){
+                locacaoId = Integer.parseInt(loc.getString("id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Deu erro ao recuperar id da locação cadastrada");
+        }
         
         inserirPagamento(locacaoId, pagamento);
 

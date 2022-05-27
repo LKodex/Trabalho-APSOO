@@ -3,8 +3,6 @@ package apsoo.controller;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import apsoo.database.GerBD;
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
@@ -26,7 +24,7 @@ public class SisLoc {
 
     // INSTANCIAÇÃO
     public Locacao criarLocacao(Date dataInicio, Date dataFim, String endereco){
-        return new Locacao(dataInicio, dataFim, endereco);
+        return new Locacao(new java.sql.Date(dataInicio.getTime()), new java.sql.Date(dataFim.getTime()), endereco);
     }
 
     public Pagamento criarPagamento(int id, String metodo, String observacao){
