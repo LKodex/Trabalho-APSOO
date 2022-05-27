@@ -11,16 +11,18 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.model.Pagamento;
+import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextAreaPlaceholder;
 import apsoo.view.extensions.JTextFieldPlaceholder;
 
-public class RegistroPagamento extends JLayeredPane {
+public class RegistroPagamento extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new HashMap<String, JComponent>();
+    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
 
     public RegistroPagamento(Janela janela){
         this.janela = janela;
@@ -79,5 +81,24 @@ public class RegistroPagamento extends JLayeredPane {
         for (String componentName : components.keySet()) {
             add(components.get(componentName));
         }
+    }
+
+    public Pagamento getPagamento(){
+        Pagamento pagamento = null;
+        try {
+            pagamento = new Pagamento(
+                Integer.parseInt(((JTextFieldPlaceholder) components.get("numeroPagamento")).getText()),
+                ((JTextFieldPlaceholder) components.get("formaPagamento")).getText(),
+                ((JTextFieldPlaceholder) components.get("infoAdicional")).getText()
+                );
+        } catch (Exception e) {
+            System.out.println("Não foi possível criar uma instância de pagamento! Retornando null");
+        }
+        return pagamento;
+    }
+
+    public void updateTela(){
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
     }
 }

@@ -5,21 +5,23 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextFieldPlaceholder;
 
-public class TelaInicial extends JLayeredPane {
+public class TelaInicial extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new HashMap<String, JComponent>();
+    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
 
     public TelaInicial(Janela janela){
         this.janela = janela;
@@ -43,13 +45,7 @@ public class TelaInicial extends JLayeredPane {
         components.put("funcionarioCPF", new JTextFieldPlaceholder("CPF..."));
         components.get("funcionarioCPF").setBounds(465, 360, 350, 35);
 
-        // Footer
-        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 1, 5), SwingConstants.CENTER));
-        components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
-        components.get("lblFooter").setBounds(0, janela.getHeight() - 159, janela.getWidth(), 120);
-        components.get("lblFooter").setOpaque(true);
-        components.get("lblFooter").setBackground(new Color(54, 57, 67));
-        components.get("lblFooter").setForeground(Color.WHITE);
+        
 
         // Botão Continuar
         components.put("btnProximo", new JButton("CONTINUAR"));
@@ -77,8 +73,42 @@ public class TelaInicial extends JLayeredPane {
             }
         });
 
+        // Footer
+        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 1, 5), SwingConstants.CENTER));
+        components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
+        components.get("lblFooter").setBounds(0, janela.getHeight() - 159, janela.getWidth(), 120);
+        components.get("lblFooter").setOpaque(true);
+        components.get("lblFooter").setBackground(new Color(54, 57, 67));
+        components.get("lblFooter").setForeground(Color.WHITE);
+
         for (String componentName : components.keySet()) {
             add(components.get(componentName));
         }
+    }
+
+    public String getClienteCpf(){
+        String cpf = null;
+        try {
+            cpf = ((JTextFieldPlaceholder) components.get("clienteCPF")).getText().replaceAll("[^0-9]", "");
+        } catch (Exception e) {
+            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
+        }
+        return cpf;
+    }
+
+    public String getFuncionarioCpf(){
+        String cpf = null;
+        try {
+            cpf = ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText().replaceAll("[^0-9]", "");
+        } catch (Exception e) {
+            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
+        }
+        return cpf;
+    }
+
+    public void updateTela(){
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
+        components.get("btnAnterior").repaint();
     }
 }

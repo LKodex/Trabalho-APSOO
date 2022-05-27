@@ -2,31 +2,54 @@ package apsoo.view.layeredPanes;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
+import javax.swing.JScrollPane;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.List;
 import java.util.Map;
 
+import apsoo.model.Artigo;
+import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
-import apsoo.view.extensions.JTextFieldPlaceholder;
 
-public class MenuArtigos extends JLayeredPane {
+public class MenuArtigos extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new HashMap<String, JComponent>();
+    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private List<Artigo> artigoLista = new ArrayList<Artigo>();
+    private List<JCheckBox> artigosCheckBox = new ArrayList<JCheckBox>();
 
     public MenuArtigos(Janela janela){
         this.janela = janela;
+        // artigoLista = janela.controller.consultarArtigosDisponiveis(janela.getDataInicio(), janela.getDataFim());
+        for (int i = 0; i < 24; i++) {
+            artigoLista.add(new Artigo(i + 1, "Nome do Artigo", 17.7 * (i + 1), 5 * i));
+        }
         initializeComponents();
     }
 
     private void initializeComponents(){
+        components.put("lblMenuEscolha", new JLabel("Menu de Escolha de Artigos", SwingConstants.CENTER));
+        components.get("lblMenuEscolha").setBounds(465, 50, 350, 35);
+        ((JLabel) components.get("lblMenuEscolha")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblMenuEscolha").setFont(new Font("Arial", Font.BOLD, 22));
+
+        for (Artigo artigo : artigoLista) {
+            artigosCheckBox.add(new JCheckBox(String.format("%d | %s | R$%.2f | Qntd: %d", artigo.getCodigo(), artigo.getNome(), artigo.getValorDiaria(), artigo.getEstoqueTotal())));
+        }
+        
+        for (int i = 0; i < artigoLista.size(); i++) {
+            artigosCheckBox.get(i).setBounds(170 + 300 * (i / 8), 120 + 50 * (i % 8), 300, 40);
+        }
+
         // Footer
         components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 3, 5), SwingConstants.CENTER));
         components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
@@ -64,5 +87,30 @@ public class MenuArtigos extends JLayeredPane {
         for (String componentName : components.keySet()) {
             add(components.get(componentName));
         }
+
+        for(JCheckBox jCheckBox : artigosCheckBox){
+            add(jCheckBox);
+        }
+    }
+
+    public List<Artigo> getArtigosSelecionados(){
+        List<Artigo> artigosSelecionados = new ArrayList<Artigo>();
+        int meodeosatequandoisso = 0;
+        for (Artigo artigo : artigoLista) {
+            if (artigosCheckBox.get(meodeosatequandoisso).isSelected()) {
+                artigosSelecionados.add(artigo);
+            }
+            meodeosatequandoisso++;
+        }
+        return artigosSelecionados;
+    }
+
+    public void updateTela(){
+        for(JCheckBox jCheckBox : artigosCheckBox){
+            jCheckBox.setVisible(false);
+            jCheckBox.setVisible(true);
+        }
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
     }
 }

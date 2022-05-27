@@ -4,22 +4,28 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.List;
 import java.util.Map;
 
+import apsoo.model.Artigo;
+import apsoo.model.ArtigoLocado;
+import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextFieldPlaceholder;
 
-public class CarrinhoArtigos extends JLayeredPane {
+public class CarrinhoArtigos extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new HashMap<String, JComponent>();
+    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private List<Artigo> artigoLista = new ArrayList<Artigo>();
+    private List<JLabel> artigosLabel = new ArrayList<JLabel>();
+    private List<JTextFieldPlaceholder> artigosInput = new ArrayList<JTextFieldPlaceholder>();
 
     public CarrinhoArtigos(Janela janela){
         this.janela = janela;
@@ -27,6 +33,11 @@ public class CarrinhoArtigos extends JLayeredPane {
     }
 
     private void initializeComponents(){
+        components.put("lblCarrinho", new JLabel("Carrinho de Artigos", SwingConstants.CENTER));
+        components.get("lblCarrinho").setBounds(465, 50, 350, 35);
+        ((JLabel) components.get("lblCarrinho")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblCarrinho").setFont(new Font("Arial", Font.BOLD, 22));
+
         // Footer
         components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 4, 5), SwingConstants.CENTER));
         components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
@@ -64,5 +75,54 @@ public class CarrinhoArtigos extends JLayeredPane {
         for (String componentName : components.keySet()) {
             add(components.get(componentName));
         }
+    }
+
+    public List<ArtigoLocado> getArtigosLocados(){
+        List<ArtigoLocado> artigosLocados = new ArrayList<ArtigoLocado>();
+        int daquelejeitao = 0;
+        for (Artigo artigo : artigoLista) {
+            artigosLocados.add(new ArtigoLocado(artigo.getCodigo(), Integer.parseInt(artigosInput.get(daquelejeitao).getText()), artigo.getValorDiaria()));
+            daquelejeitao++;
+        }
+        if(artigosLocados.size() <= 0) return null;
+        return artigosLocados;
+    }
+
+    public void updateTela(){
+        // Recupera lista de artigos selecionados
+        artigoLista = janela.getArtigosSelecionados();
+
+        // Remove elementos da tela
+        for(JLabel jLabel : artigosLabel){ remove(jLabel); }
+        for(JTextFieldPlaceholder jPlaceholder : artigosInput){ remove(jPlaceholder); }
+
+        // Cria novas listas vazias
+        artigosLabel = new ArrayList<JLabel>();
+        artigosInput = new ArrayList<JTextFieldPlaceholder>();
+
+        for (Artigo artigo : artigoLista) {
+            artigosLabel.add(new JLabel(String.format("%d | %s | R$%.2f | Qntd: %d", artigo.getCodigo(), artigo.getNome(), artigo.getValorDiaria(), artigo.getEstoqueTotal())));
+            artigosInput.add(new JTextFieldPlaceholder("0"));
+        }
+        
+        for (int i = 0; i < artigoLista.size(); i++) {
+            artigosLabel.get(i).setBounds(120 + 350 * (i / 8), 120 + 50 * (i % 8), 300, 40);
+            artigosInput.get(i).setBounds(70 + 350 * (i / 8), 120 + 50 * (i % 8), 40, 40);
+        }
+
+        // Adiciona componentes de listagem a tela
+        for(JLabel jLabel : artigosLabel){ add(jLabel); }
+        for(JTextFieldPlaceholder jPlaceholder : artigosInput){ add(jPlaceholder); }
+
+        for(JLabel artigo : artigosLabel){
+            artigo.setVisible(false);
+            artigo.setVisible(true);
+        }
+        for(JTextFieldPlaceholder jPlaceholder : artigosInput){
+            jPlaceholder.setVisible(false);
+            jPlaceholder.setVisible(true);
+        }
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
     }
 }

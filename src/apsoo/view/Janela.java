@@ -1,10 +1,13 @@
 package apsoo.view;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
 
+import apsoo.model.Artigo;
 //import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
@@ -16,7 +19,7 @@ public class Janela extends JFrame {
     private static final short WIDTH = 1280;
     private static final short HEIGHT = 720;
     private short telaAtual = 0;
-    private List<JLayeredPane> layeredPanes = new ArrayList<JLayeredPane>();
+    private List<AJanelaLayer> layeredPanes = new ArrayList<AJanelaLayer>();
     //private SisLoc controller;
 
     public Janela(){
@@ -35,6 +38,7 @@ public class Janela extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     /**
@@ -73,9 +77,10 @@ public class Janela extends JFrame {
      * Atualiza a tela para a variável da posição do valor de telaAtual
      */
     private void changeLayeredPane(){
-        setVisible(false);
+        layeredPanes.get(telaAtual).setVisible(false);
         setLayeredPane(layeredPanes.get(telaAtual));
-        setVisible(true);
+        layeredPanes.get(telaAtual).setVisible(true);
+        layeredPanes.get(telaAtual).updateTela();
     }
 
     public int getWidth(){
@@ -88,5 +93,31 @@ public class Janela extends JFrame {
 
     public int getTelaAtual(){
         return telaAtual;
+    }
+
+    public Date getDataInicio(){
+        try {
+            return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Date getDataFim(){
+        try {
+            return ((DataLocacao) layeredPanes.get(1)).getDataFim();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Artigo> getArtigosSelecionados(){
+        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
+    }
+
+    public void mostrarMensagem(String mensagem){
+        JOptionPane.showMessageDialog(this, mensagem, "Resultado", JOptionPane.PLAIN_MESSAGE);
     }
 }

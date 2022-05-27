@@ -4,22 +4,24 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TreeMap;
+import java.util.Date;
 import java.util.Map;
 
+import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextFieldPlaceholder;
 
-public class DataLocacao extends JLayeredPane {
+public class DataLocacao extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new HashMap<String, JComponent>();
+    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
 
     public DataLocacao(Janela janela){
         this.janela = janela;
@@ -75,5 +77,30 @@ public class DataLocacao extends JLayeredPane {
         for (String componentName : components.keySet()) {
             add(components.get(componentName));
         }
+    }
+
+    public Date getDataInicio(){
+        Date dataInicio = null;
+        try {
+            dataInicio = new SimpleDateFormat().parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText());
+        } catch (Exception e) {
+            System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null");
+        }
+        return dataInicio;
+    }
+
+    public Date getDataFim() throws ParseException{
+        Date dataFim = null;
+        try {
+            dataFim = new SimpleDateFormat().parse(((JTextFieldPlaceholder) components.get("dataFim")).getText());
+        } catch (Exception e) {
+            System.out.println("Não foi possível criar uma instância de data do fim! Retornando null");
+        }
+        return dataFim;
+    }
+
+    public void updateTela(){
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
     }
 }
