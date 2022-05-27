@@ -4,7 +4,6 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
 
 import java.awt.Font;
 import java.awt.Color;

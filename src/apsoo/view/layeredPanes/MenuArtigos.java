@@ -5,8 +5,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
-import javax.swing.JScrollPane;
 
 import java.awt.Font;
 import java.awt.Color;

@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TreeMap;
 import java.util.Date;
@@ -89,7 +88,7 @@ public class DataLocacao extends AJanelaLayer {
         return dataInicio;
     }
 
-    public Date getDataFim() throws ParseException{
+    public Date getDataFim(){
         Date dataFim = null;
         try {
             dataFim = new SimpleDateFormat().parse(((JTextFieldPlaceholder) components.get("dataFim")).getText());

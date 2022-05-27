@@ -1,6 +1,5 @@
 package apsoo.view;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +7,8 @@ import java.util.List;
 import javax.swing.*;
 
 import apsoo.model.Artigo;
+import apsoo.model.ArtigoLocado;
+import apsoo.model.Pagamento;
 //import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
@@ -95,22 +96,28 @@ public class Janela extends JFrame {
         return telaAtual;
     }
 
+    public String getClienteCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getClienteCpf();
+    }
+
+    public String getFuncionarioCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf();
+    }
+
     public Date getDataInicio(){
-        try {
-            return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
     }
 
     public Date getDataFim(){
-        try {
-            return ((DataLocacao) layeredPanes.get(1)).getDataFim();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return ((DataLocacao) layeredPanes.get(1)).getDataFim();
+    }
+
+    public List<ArtigoLocado> getArtigoLocados(){
+        return ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
+    }
+
+    public Pagamento getPagamento(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getPagamento();
     }
 
     public List<Artigo> getArtigosSelecionados(){
