@@ -27,7 +27,7 @@ public class DataLocacao extends JLayeredPane {
 
     private void initializeComponents(){
         // Footer
-        components.put("lblFooter", new JLabel(String.format("<html>%d/%d<br/>&#0;</html>", 2, 5), SwingConstants.CENTER));
+        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 2, 5), SwingConstants.CENTER));
         components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
         components.get("lblFooter").setBounds(0, janela.getHeight() - 159, janela.getWidth(), 120);
         components.get("lblFooter").setOpaque(true);
