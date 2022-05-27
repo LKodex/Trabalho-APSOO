@@ -4,13 +4,11 @@ public class ArtigoLocado {
     private int codigo;
     private int quantidade;
     private double valorDiaria;
-    private double valorTotal;
 
     public ArtigoLocado(int codigo, int quantidade, double valorDiaria){
         this.codigo = codigo;
         this.quantidade = quantidade;
         this.valorDiaria = valorDiaria;
-        valorTotal = quantidade * valorDiaria;
     }
 
     public int getCodigo(){
@@ -38,6 +36,6 @@ public class ArtigoLocado {
     }
 
     public double getValorTotal(){
-        return valorTotal;
+        return valorDiaria * quantidade;
     }
 }

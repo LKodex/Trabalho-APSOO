@@ -60,7 +60,11 @@ public class RegistroPagamento extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.nextScreen();
+                if(janela.getPagamento()){
+                    janela.mostrarMensagem("Locacao cadastrada com sucesso!");
+                } else {
+                    janela.mostrarMensagem("Preencha todos os campos");
+                }
             }
         });
 
@@ -99,5 +103,17 @@ public class RegistroPagamento extends AJanelaLayer {
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
+    }
+
+    public int getIdPagamento() {
+        return Integer.parseInt(((JTextFieldPlaceholder) components.get("numeroPagamento")).getText());
+    }
+
+    public String getForma() {
+        return ((JTextFieldPlaceholder) components.get("formaPagamento")).getText();
+    }
+
+    public String getInfo() {
+        return ((JTextFieldPlaceholder) components.get("infoAdicional")).getText();
     }
 }

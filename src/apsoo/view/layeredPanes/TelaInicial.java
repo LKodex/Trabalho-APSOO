@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import java.util.TreeMap;
 import java.util.Map;
@@ -54,7 +55,11 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.nextScreen();
+                if(janela.getClienteFuncionario()){
+                    janela.nextScreen();
+                } else {
+                    janela.mostrarMensagem("Usuário ou Funcionário não encontrado!");
+                }
             }
         });
 
@@ -67,6 +72,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
+                janela.dispatchEvent(new WindowEvent(janela, WindowEvent.WINDOW_CLOSING));  
                 janela.previousScreen();
             }
         });

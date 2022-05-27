@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Locacao {
+    private int id;
     private Date dataReservada;
     private Date inicio;
     private Date fim;
@@ -14,14 +15,14 @@ public class Locacao {
     private List<ArtigoLocado> artigoLocados;
 
     public Locacao(Date inicio, Date fim, String endereco){
-        // TODO: atribuir data e hora atual á dataReservada
+        this.dataReservada = new Date();
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;
     }
 
     public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento){
-        // TODO: atribuir data e hora atual á dataReservada
+        this.dataReservada = new Date();
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;
@@ -31,7 +32,7 @@ public class Locacao {
     }
 
     public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento, List<ArtigoLocado> artigoLocados){
-        // TODO: atribuir data e hora atual á dataReservada
+        this.dataReservada = new Date();
         this.inicio = inicio;
         this.fim = fim;
         this.endereco = endereco;
@@ -45,6 +46,14 @@ public class Locacao {
         this.artigoLocados = artigoLocados;
         this.funcionario = funcionario;
         this.pagamento = pagamento;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public Date getDataReservada() {
@@ -70,5 +79,37 @@ public class Locacao {
     }
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario){
+        this.funcionario = funcionario;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
+
+    public Pagamento getPagamento(){
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento){
+        this.pagamento = pagamento;
+    }
+
+    public List<ArtigoLocado> getArtigoLocados(){
+        return artigoLocados;
+    }
+
+    public void setArtigoLocados(List<ArtigoLocado> artigoLocados){
+        this.artigoLocados = artigoLocados;
     }
 }
