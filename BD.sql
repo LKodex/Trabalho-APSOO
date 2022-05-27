@@ -46,4 +46,4 @@ CREATE TABLE IF NOT EXISTS Pagamento(
 	info varchar(255),
 	FOREIGN KEY (locId) REFERENCES Locacao(id),
 	PRIMARY KEY (id, locId)
-)
+);
