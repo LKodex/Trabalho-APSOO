@@ -1,10 +1,11 @@
 package apsoo.view;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
+
+import java.sql.Date;
 
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
@@ -119,12 +120,14 @@ public class Janela extends JFrame {
     // Passo 2/5
     public boolean getDatasEndereco(){
         locacao = null;
+        Date dataInicio = ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+        Date dataFim = ((DataLocacao) layeredPanes.get(1)).getDataFim();
         locacao = new Locacao(
-            ((DataLocacao) layeredPanes.get(1)).getDataInicio(),
-            ((DataLocacao) layeredPanes.get(1)).getDataFim(),
+            dataInicio,
+            dataFim,
             ((DataLocacao) layeredPanes.get(1)).getEndereco()
             );
-        return locacao != null && ((DataLocacao) layeredPanes.get(1)).getDataInicio().before(((DataLocacao) layeredPanes.get(1)).getDataFim());
+        return locacao != null && dataInicio.before(dataFim);
     }
 
     // Passo 4/5
@@ -160,23 +163,37 @@ public class Janela extends JFrame {
     }
 
     public Date getDataInicio(){
-        return locacao.getInicio();
+        return new Date(locacao.getInicio().getTime());
     }
 
     public Date getDataFim(){
-        return locacao.getFim();
+        return new Date(locacao.getFim().getTime());
     }
 
     public boolean realizarLocacao(){
         locacao.setCliente(cliente);
         locacao.setFuncionario(funcionario);
-        int locId = controller.cadastrarLocacao(locacao);
-        controller.cadastrarPagamento(pagamento, locId);
-        controller.cadastrarArtigosLocados(listaArtigo, locId);
+        locacao.setPagamento(pagamento);
+        locacao.setArtigoLocados(listaArtigo);
+        controller.cadastrarLocacao(locacao);
         return true;
     }
 
     public SisLoc getController(){
         return controller;
+    }
+
+    public void mostrarClienteEFuncionario() {
+        mostrarMensagem(String.format("Cliente = %s\nFuncionário = %s", cliente.getNome(), funcionario.getNome()));
+    }
+
+    public void mostrarLocacao(){
+        mostrarMensagem(String.format("Locado com sucesso!\nId = %d\nReservado em = %s\nInicio em = %s\nFim em = %s\nEndereco = %s\n",
+            locacao.getId(),
+            locacao.getDataReservada(),
+            locacao.getInicio(),
+            locacao.getFim(),
+            locacao.getEndereco()
+        ));
     }
 }

@@ -1,8 +1,8 @@
 package apsoo.database;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import apsoo.model.Artigo;
@@ -31,8 +31,8 @@ public class GerBD {
         Cliente cliente = null;
 
         try {
-            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf LIKE '%s'", cpf));
-            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
+            clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf = '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
 
             if(clienteResultSet.next() && pessoaResultSet.next()){
                 cliente = new Cliente(pessoaResultSet.getString("nome"), cpf, clienteResultSet.getString("celular"));
@@ -49,8 +49,8 @@ public class GerBD {
         Funcionario funcionario = null;
 
         try {
-            funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf LIKE '%s'", cpf));
-            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf LIKE '%s'", cpf));
+            funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf = '%s'", cpf));
+            pessoaResultSet = conexao.select(String.format("SELECT * FROM Pessoa WHERE cpf = '%s'", cpf));
 
             if(funcionarioResultSet.next() && pessoaResultSet.next()){
                 funcionario = new Funcionario(pessoaResultSet.getString("nome"), cpf, funcionarioResultSet.getString("senha"), 0.0);
@@ -61,7 +61,7 @@ public class GerBD {
         return funcionario;
     }
 
-    public List<Artigo> buscarArtigos(Date inicioLocacao, Date fimLocacao){
+    public List<Artigo> buscarArtigos(){
         List<Artigo> listaArtigos = new ArrayList<Artigo>();
         try {
             ResultSet resultSet = conexao.select("SELECT * FROM Artigo");
@@ -83,10 +83,13 @@ public class GerBD {
     
     // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
     public int inserirLocacao(Locacao locacao){
-        int resultado = -1;
-        if(locacao.getInicio().after(locacao.getFim())){ return resultado; }
+        int locacaoId = -1;
+        if(locacao.getInicio().after(locacao.getFim())){ return locacaoId; }
 
-        resultado = conexao.insert(String.format("INSERT INTO Locaco (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES (%s, %s, %s, %s, %s, %s)",
+        List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
+        Pagamento pagamento = locacao.getPagamento();
+
+        conexao.insert(String.format("INSERT INTO Locacao (cpfCliente, cpfFuncionario, inicioPrevisto, fimPrevisto, dataReservada, endereco) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
             locacao.getCliente().getCpf(),
             locacao.getFuncionario().getCpf(),
             locacao.getInicio(),
@@ -95,19 +98,39 @@ public class GerBD {
             locacao.getEndereco()
         ));
 
-        if (resultado > 0){
+        ResultSet loc = conexao.select(String.format("SELECT (id) FROM Locacao WHERE cpfCliente='%s' AND cpfFuncionario='%s' AND dataReservada = '%s'",
+            locacao.getCliente().getCpf(),
+            locacao.getFuncionario().getCpf(),
+            locacao.getDataReservada()
+        ));
+
+        try {
+            if(loc.next()){
+                locacaoId = Integer.parseInt(loc.getString("id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Deu erro ao recuperar id da locação cadastrada");
+        }
+        
+        inserirPagamento(locacaoId, pagamento);
+
+        for (ArtigoLocado artigoLocado : artigoLocados) {
+            inserirArtigoLocado(locacaoId, artigoLocado);
+        }
+
+        if (locacaoId > 0){
             ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s'",
                 locacao.getCliente().getCpf(),
                 locacao.getFuncionario().getCpf(),
                 locacao.getDataReservada()
             ));
             try {
-                resultado = Integer.parseInt(resultSet.getString("id"));
+                locacaoId = Integer.parseInt(resultSet.getString("id"));
             } catch (Exception e) {
                 System.out.println("Erro ao recuperar o Id da locação recem inserida!");
             }
         }
-        return resultado;
+        return locacaoId;
     }
 
     // Persiste uma instância de artigoLocado no banco de dados
@@ -146,7 +169,7 @@ public class GerBD {
                 artigoLocado.getCodigo()
             ));
         } catch (Exception e) {
-            System.out.println("Erro ao recuperar a qauntidade de estoque de artigo!");
+            System.out.println("Erro ao recuperar a quantidade de estoque de artigo!");
             return -1;
         }
     }

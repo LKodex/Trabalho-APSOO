@@ -27,7 +27,7 @@ public class MenuArtigos extends AJanelaLayer {
 
     public MenuArtigos(Janela janela){
         this.janela = janela;
-        artigoLista = janela.getController().consultarArtigosDisponiveis(janela.getDataInicio(), janela.getDataFim());
+        artigoLista = janela.getController().consultarArtigosDisponiveis();
         initializeComponents();
     }
 

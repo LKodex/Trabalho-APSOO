@@ -9,9 +9,9 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.TreeMap;
-import java.util.Date;
 import java.util.Map;
 
 import apsoo.view.AJanelaLayer;
@@ -33,10 +33,10 @@ public class DataLocacao extends AJanelaLayer {
         ((JLabel) components.get("lblDataLocacao")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblDataLocacao").setFont(new Font("Arial", Font.BOLD, 22));
         
-        components.put("dataInicio", new JTextFieldPlaceholder("Data de Inicio (DD/MM/AAAA)"));
+        components.put("dataInicio", new JTextFieldPlaceholder("Data de Inicio (dd-MM-AAAA)"));
         components.get("dataInicio").setBounds(465, 220, 350, 35);
 
-        components.put("dataFim", new JTextFieldPlaceholder("Data de Fim (DD/MM/AAAA)"));
+        components.put("dataFim", new JTextFieldPlaceholder("Data de Fim (dd-MM-AAAA)"));
         components.get("dataFim").setBounds(465, 270, 350, 35);
 
         components.put("endereco", new JTextFieldPlaceholder("Endereço"));
@@ -88,7 +88,7 @@ public class DataLocacao extends AJanelaLayer {
     public Date getDataInicio(){
         Date dataInicio = null;
         try {
-            dataInicio = new SimpleDateFormat().parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText());
+            dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime());
         } catch (Exception e) {
             System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null");
         }
@@ -98,7 +98,7 @@ public class DataLocacao extends AJanelaLayer {
     public Date getDataFim(){
         Date dataFim = null;
         try {
-            dataFim = new SimpleDateFormat().parse(((JTextFieldPlaceholder) components.get("dataFim")).getText());
+            dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime());
         } catch (Exception e) {
             System.out.println("Não foi possível criar uma instância de data do fim! Retornando null");
         }
