@@ -1,7 +1,7 @@
 @echo off
 
 SETLOCAL
-echo Compiling using jdk-13.0.1...
+echo Trying to compile using jdk-13.0.1...
 
 if exist %PROGRAMFILES%\Java\jdk-13.0.1 (
     set PATH=%PROGRAMFILES%\Java\jdk-13.0.1\bin;%PATH%

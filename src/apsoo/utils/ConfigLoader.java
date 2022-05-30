@@ -49,10 +49,8 @@ public class ConfigLoader {
     private void setDefaultConfigProperties(){
         properties = new Properties();
 
-        properties.setProperty("DB_USER", "postgre");
-        properties.setProperty("DB_PASS", "postgre");
-        properties.setProperty("DB_HOST", "localhost");
-        properties.setProperty("DB_PORT", "5432");
+        properties.setProperty("DB_USER", "sqlite");
+        properties.setProperty("DB_PASS", "sqlite");
         properties.setProperty("DB_NAME", "G10_APSOO");
     }
 
