@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -80,6 +79,7 @@ public class Conexao {
             resultSet = statement.executeQuery(sqlCommand);
         } catch (SQLException e) {
             System.out.println("Erro ao executar comando SQL de Seleção! Retornando null");
+            e.printStackTrace();
         }
         return resultSet;
     }

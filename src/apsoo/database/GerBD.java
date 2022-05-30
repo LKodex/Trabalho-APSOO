@@ -82,9 +82,8 @@ public class GerBD {
     }
     
     // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
-    public int inserirLocacao(Locacao locacao){
-        int locacaoId = -1;
-        if(locacao.getInicio().after(locacao.getFim())){ return locacaoId; }
+    public boolean inserirLocacao(Locacao locacao){
+        if(locacao.getInicio().after(locacao.getFim())){ return false; }
 
         List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
         Pagamento pagamento = locacao.getPagamento();
@@ -98,39 +97,16 @@ public class GerBD {
             locacao.getEndereco()
         ));
 
-        ResultSet loc = conexao.select(String.format("SELECT (id) FROM Locacao WHERE cpfCliente='%s' AND cpfFuncionario='%s' AND dataReservada = '%s'",
-            locacao.getCliente().getCpf(),
-            locacao.getFuncionario().getCpf(),
-            locacao.getDataReservada()
-        ));
-
         try {
-            if(loc.next()){
-                locacaoId = Integer.parseInt(loc.getString("id"));
-            }
-        } catch (Exception e) {
-            System.out.println("Deu erro ao recuperar id da locação cadastrada");
+            ResultSet locIdRS = conexao.select(sqlCommand)
         }
         
-        inserirPagamento(locacaoId, pagamento);
+        inserirPagamento(locacao.getId(), pagamento);
 
         for (ArtigoLocado artigoLocado : artigoLocados) {
-            inserirArtigoLocado(locacaoId, artigoLocado);
+            inserirArtigoLocado(locacao.getId(), artigoLocado);
         }
-
-        if (locacaoId > 0){
-            ResultSet resultSet = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s'",
-                locacao.getCliente().getCpf(),
-                locacao.getFuncionario().getCpf(),
-                locacao.getDataReservada()
-            ));
-            try {
-                locacaoId = Integer.parseInt(resultSet.getString("id"));
-            } catch (Exception e) {
-                System.out.println("Erro ao recuperar o Id da locação recem inserida!");
-            }
-        }
-        return locacaoId;
+        return true;
     }
 
     // Persiste uma instância de artigoLocado no banco de dados
