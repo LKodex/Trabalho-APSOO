@@ -1,1 +1,1 @@
-Class-Path: lib/postgresql-42.3.5.jar
+Class-Path: lib/sqlite-jdbc-3.36.0.3.jar

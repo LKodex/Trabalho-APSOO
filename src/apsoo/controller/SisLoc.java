@@ -57,7 +57,7 @@ public class SisLoc {
         return db.inserirPagamento(locacaoId, pagamento);
     }
 
-    public int cadastrarLocacao(Locacao locacao){
+    public boolean cadastrarLocacao(Locacao locacao){
         return db.inserirLocacao(locacao);
     }
 }

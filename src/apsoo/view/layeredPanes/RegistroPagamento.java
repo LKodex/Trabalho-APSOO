@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import java.util.TreeMap;
 import java.util.Map;
@@ -64,6 +65,7 @@ public class RegistroPagamento extends AJanelaLayer {
                 if(pagamentoPreenchdio){
                     if(janela.realizarLocacao()){
                         janela.mostrarLocacao();
+                        janela.dispatchEvent(new WindowEvent(janela, WindowEvent.WINDOW_CLOSING));
                     } else {
                         janela.mostrarMensagem("Erro ao cadastrar locação");
                     }
