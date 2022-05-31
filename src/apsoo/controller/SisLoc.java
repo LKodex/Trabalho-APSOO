@@ -10,12 +10,17 @@ import apsoo.model.Cliente;
 import apsoo.model.Funcionario;
 import apsoo.model.Locacao;
 import apsoo.model.Pagamento;
+import apsoo.view.Janela;
 
 public class SisLoc {
     private GerBD db;
+    private Janela janela;
+    private Locacao locacao;
 
-    public SisLoc(){
+    public SisLoc(Janela janela){
+        this.janela = janela;
         this.db = GerBD.getInstance();
+        locacao = new Locacao();
     }
 
     public boolean dataValida(Date inicio, Date fim){
@@ -59,5 +64,13 @@ public class SisLoc {
 
     public int cadastrarLocacao(Locacao locacao){
         return db.inserirLocacao(locacao);
+    }
+
+    public boolean getClienteFuncionario() {
+        String clienteCpf = janela.getClienteCpf();
+        String funcionarioCpf = janela.getFuncionarioCpf();
+
+        Cliente cliente = db.buscarCliente(clienteCpf);
+        Funcionario funcionario = db.buscarFuncionario(funcionarioCpf);
     }
 }

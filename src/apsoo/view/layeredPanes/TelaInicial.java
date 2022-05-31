@@ -55,9 +55,8 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getClienteFuncionario()){
+                if(janela.getController().getClienteFuncionario()){
                     janela.nextScreen();
-                    janela.mostrarClienteEFuncionario();
                 } else {
                     janela.mostrarMensagem("Usuário ou Funcionário não encontrado!");
                 }
@@ -93,21 +92,19 @@ public class TelaInicial extends AJanelaLayer {
 
     public String getClienteCpf(){
         String cpf = null;
-        try {
-            cpf = ((JTextFieldPlaceholder) components.get("clienteCPF")).getText().replaceAll("[^0-9]", "");
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
-        }
+
+        try { cpf = ((JTextFieldPlaceholder) components.get("clienteCPF")).getText(); }
+        catch (Exception e) { e.printStackTrace(); }
+        
         return cpf;
     }
 
     public String getFuncionarioCpf(){
         String cpf = null;
-        try {
-            cpf = ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText().replaceAll("[^0-9]", "");
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
-        }
+
+        try { cpf = ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText(); }
+        catch (Exception e) { System.out.println("Não foi possível criar uma instância de cliente! Retornando null"); }
+        
         return cpf;
     }
 

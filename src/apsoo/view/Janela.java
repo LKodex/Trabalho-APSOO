@@ -107,27 +107,21 @@ public class Janela extends JFrame {
     }
 
     // Passo 1/5
-    public boolean getClienteFuncionario(){
-        cliente = null;
-        funcionario = null;
+    public String getClienteCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getClienteCpf();
+    }
 
-        cliente = controller.buscarCliente(((TelaInicial) layeredPanes.get(0)).getClienteCpf());
-        funcionario = controller.buscarFuncionario(((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf());
-
-        return cliente != null && funcionario != null;
+    public String getFuncionarioCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf();
     }
 
     // Passo 2/5
-    public boolean getDatasEndereco(){
-        locacao = null;
-        Date dataInicio = ((DataLocacao) layeredPanes.get(1)).getDataInicio();
-        Date dataFim = ((DataLocacao) layeredPanes.get(1)).getDataFim();
-        locacao = new Locacao(
-            dataInicio,
-            dataFim,
-            ((DataLocacao) layeredPanes.get(1)).getEndereco()
-            );
-        return locacao != null && dataInicio.before(dataFim);
+    public Date getDataInicio(){
+        return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+    }
+
+    public Date getDataFim(){
+        return ((DataLocacao) layeredPanes.get(1)).getDataFim();
     }
 
     // Passo 4/5
@@ -160,14 +154,6 @@ public class Janela extends JFrame {
 
     public void mostrarMensagem(String mensagem){
         JOptionPane.showMessageDialog(this, mensagem, "Resultado", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public Date getDataInicio(){
-        return new Date(locacao.getInicio().getTime());
-    }
-
-    public Date getDataFim(){
-        return new Date(locacao.getFim().getTime());
     }
 
     public boolean realizarLocacao(){

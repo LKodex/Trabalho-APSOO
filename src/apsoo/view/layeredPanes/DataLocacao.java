@@ -59,11 +59,8 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getDatasEndereco()){
-                    janela.nextScreen();
-                } else {
-                    janela.mostrarMensagem("Algo deu errado! Por favor preencha todos os campos e insira uma data de inicio anterior á final");
-                }
+                janela.getController().salvarDatas();
+                janela.nextScreen();
             }
         });
 
@@ -87,21 +84,19 @@ public class DataLocacao extends AJanelaLayer {
 
     public Date getDataInicio(){
         Date dataInicio = null;
-        try {
-            dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime());
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null");
-        }
+
+        try { dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime()); }
+        catch (Exception e) { System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null"); }
+        
         return dataInicio;
     }
 
     public Date getDataFim(){
         Date dataFim = null;
-        try {
-            dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime());
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de data do fim! Retornando null");
-        }
+
+        try { dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime()); }
+        catch (Exception e) { e.printStackTrace(); }
+
         return dataFim;
     }
 
