@@ -98,7 +98,19 @@ public class GerBD {
         ));
 
         try {
-            ResultSet locIdRS = conexao.select(sqlCommand)
+            ResultSet locIdRS = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s' AND endereco LIKE '%s'",
+                locacao.getCliente().getCpf(),
+                locacao.getFuncionario().getCpf(),
+                locacao.getDataReservada(),
+                locacao.getEndereco()
+            ));
+
+            if(locIdRS.next()){
+                System.out.println(String.format("ID RS = \"%d\"", locIdRS.getInt("id")));
+                locacao.setId(locIdRS.getInt("id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
         inserirPagamento(locacao.getId(), pagamento);
