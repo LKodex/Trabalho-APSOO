@@ -98,26 +98,27 @@ public class GerBD {
             locacao.getEndereco()
         ));
 
-        ResultSet loc = conexao.select(String.format("SELECT (id) FROM Locacao WHERE cpfCliente='%s' AND cpfFuncionario='%s' AND dataReservada = '%s'",
-            locacao.getCliente().getCpf(),
-            locacao.getFuncionario().getCpf(),
-            locacao.getDataReservada()
-        ));
-
         try {
-            if(loc.next()){
-                locacaoId = Integer.parseInt(loc.getString("id"));
+            ResultSet locIdRS = conexao.select(String.format("SELECT id FROM Locacao WHERE cpfCliente LIKE '%s' AND cpfFuncionario LIKE '%s' AND dataReservada = '%s' AND endereco LIKE '%s'",
+                locacao.getCliente().getCpf(),
+                locacao.getFuncionario().getCpf(),
+                locacao.getDataReservada(),
+                locacao.getEndereco()
+            ));
+
+            if(locIdRS.next()){
+                System.out.println(String.format("ID RS = \"%d\"", locIdRS.getInt("id")));
+                locacao.setId(locIdRS.getInt("id"));
             }
         } catch (Exception e) {
-            System.out.println("Deu erro ao recuperar id da locação cadastrada");
+            e.printStackTrace();
         }
         
-        inserirPagamento(locacaoId, pagamento);
+        inserirPagamento(locacao.getId(), pagamento);
 
         for (ArtigoLocado artigoLocado : artigoLocados) {
-            inserirArtigoLocado(locacaoId, artigoLocado);
+            inserirArtigoLocado(locacao.getId(), artigoLocado);
         }
-        
         return locacaoId;
     }
 
