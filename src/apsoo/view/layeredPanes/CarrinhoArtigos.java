@@ -79,7 +79,9 @@ public class CarrinhoArtigos extends AJanelaLayer {
         }
     }
 
-    public List<ArtigoLocado> getArtigosLocados(List<Artigo> artigoLista){
+    public List<ArtigoLocado> getArtigosLocados(){
+        List<Artigo> artigoLista = janela.getArtigosSelecionados();
+
         List<ArtigoLocado> artigosLocados = new ArrayList<ArtigoLocado>();
         int daquelejeitao = 0;
         for (Artigo artigo : artigoLista) {
@@ -90,7 +92,9 @@ public class CarrinhoArtigos extends AJanelaLayer {
         return artigosLocados;
     }
 
-    public void updateTela(List<Artigo> artigoLista){
+    public void updateTela(){
+        List<Artigo> artigoLista = janela.getArtigosSelecionados();
+        
         // Remove elementos antigos da tela
         for(JLabel jLabel : artigosLabel){ remove(jLabel); }
         for(JTextFieldPlaceholder jPlaceholder : artigosInput){ remove(jPlaceholder); }
@@ -127,8 +131,4 @@ public class CarrinhoArtigos extends AJanelaLayer {
 }
 
 
-    @Override
-    public void updateTela() {
-        // TODO Auto-generated method stub
-        
-    }
+    
