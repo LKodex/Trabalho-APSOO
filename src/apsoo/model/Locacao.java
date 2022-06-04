@@ -15,38 +15,8 @@ public class Locacao {
     private Pagamento pagamento;
     private List<ArtigoLocado> artigoLocados;
 
-    public Locacao(Date inicio, Date fim, String endereco){
+    public Locacao(){
         dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
-        this.inicio = inicio;
-        this.fim = fim;
-        this.endereco = endereco;
-    }
-
-    public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento){
-        dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
-        this.inicio = inicio;
-        this.fim = fim;
-        this.endereco = endereco;
-        this.funcionario = funcionario;
-        this.cliente = cliente;
-        this.pagamento = pagamento;
-    }
-
-    public Locacao(Date inicio, Date fim, String endereco, Funcionario funcionario, Cliente cliente, Pagamento pagamento, List<ArtigoLocado> artigoLocados){
-        dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
-        this.inicio = inicio;
-        this.fim = fim;
-        this.endereco = endereco;
-        this.funcionario = funcionario;
-        this.cliente = cliente;
-        this.pagamento = pagamento;
-        this.artigoLocados = artigoLocados;
-    }
-
-    public void confirmarLocacao(List<ArtigoLocado> artigoLocados, Funcionario funcionario, Pagamento pagamento){
-        this.artigoLocados = artigoLocados;
-        this.funcionario = funcionario;
-        this.pagamento = pagamento;
     }
 
     public int getId(){

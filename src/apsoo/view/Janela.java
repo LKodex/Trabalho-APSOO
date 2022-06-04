@@ -9,10 +9,6 @@ import java.sql.Date;
 
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
-import apsoo.model.Cliente;
-import apsoo.model.Funcionario;
-import apsoo.model.Locacao;
-import apsoo.model.Pagamento;
 import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
@@ -27,14 +23,8 @@ public class Janela extends JFrame {
     private List<AJanelaLayer> layeredPanes = new ArrayList<AJanelaLayer>();
     private SisLoc controller;
 
-    private Locacao locacao;
-    private Pagamento pagamento;
-    private List<ArtigoLocado> listaArtigo;
-    private Funcionario funcionario;
-    private Cliente cliente;
-
     public Janela(){
-        this.controller = new SisLoc();
+        controller = new SisLoc(this);
         initializeWindow();
         initializeLayeredPanes();
     }
@@ -90,21 +80,13 @@ public class Janela extends JFrame {
     private void changeLayeredPane(){
         layeredPanes.get(telaAtual).setVisible(false);
         setLayeredPane(layeredPanes.get(telaAtual));
-        layeredPanes.get(telaAtual).setVisible(true);
         layeredPanes.get(telaAtual).updateTela();
+        layeredPanes.get(telaAtual).setVisible(true);
     }
 
-    public int getWidth(){
-        return WIDTH;
-    }
-
-    public int getHeight(){
-        return HEIGHT;
-    }
-
-    public int getTelaAtual(){
-        return telaAtual;
-    }
+    public int getWidth(){ return WIDTH; }
+    public int getHeight(){ return HEIGHT; }
+    public int getTelaAtual(){ return telaAtual; }
 
     // Passo 1/5
     public String getClienteCpf(){
@@ -116,70 +98,81 @@ public class Janela extends JFrame {
     }
 
     // Passo 2/5
-    public Date getDataInicio(){
+    public String getDataInicio(){
         return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
     }
 
-    public Date getDataFim(){
+    public String getDataFim(){
         return ((DataLocacao) layeredPanes.get(1)).getDataFim();
     }
 
+    public String getEndereco(){
+        return ((DataLocacao) layeredPanes.get(1)).getEndereco();
+    }
+
+    // Passo 3/5
+    public List<Artigo> getArtigosSelecionados(){
+        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
+    }
+
     // Passo 4/5
-    public boolean getArtigoLocados(){
-        listaArtigo = ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
-        if (listaArtigo.size() <= 0) {
-            listaArtigo = null;
-            return false;
-        }
-        return true;
-    }
-
-    public boolean getPagamento(){
-        pagamento = null;
-        pagamento = new Pagamento(
-            ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento(),
-            ((RegistroPagamento) layeredPanes.get(4)).getForma(),
-            ((RegistroPagamento) layeredPanes.get(4)).getInfo()
-        );
-        return pagamento != null;
-    }
-
-    public List<ArtigoLocado> getListaArtigo(){
+    public List<ArtigoLocado> getArtigoLocados(){
         return ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
     }
 
-    public List<Artigo> getArtigosSelecionados(){
-        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
+    // Passo 5/5
+    public String getPagamentoId(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento();
+    }
+
+    public String getPagamentoForma(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getForma();
+    }
+
+    public String getPagamentoInfo(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getInfo();
+    }
+
+
+    public void resetar(){
+        ((TelaInicial) layeredPanes.get(0)).setClienteCpf("");
+        ((TelaInicial) layeredPanes.get(0)).setFuncionarioCpf("");
+        
+        ((DataLocacao) layeredPanes.get(1)).setDataInicio("");
+        ((DataLocacao) layeredPanes.get(1)).setDataFim("");
+        ((DataLocacao) layeredPanes.get(1)).setEndereco("");
+
+        ((RegistroPagamento) layeredPanes.get(4)).setIdPagamento("");
+        ((RegistroPagamento) layeredPanes.get(4)).setForma("");
+        ((RegistroPagamento) layeredPanes.get(4)).setInfo("");
+
+        telaAtual = 0;
+        changeLayeredPane();
+    }
+
+    public void fecharJanela(){
+        dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
     }
 
     public void mostrarMensagem(String mensagem){
         JOptionPane.showMessageDialog(this, mensagem, "Resultado", JOptionPane.PLAIN_MESSAGE);
     }
 
-    public boolean realizarLocacao(){
-        locacao.setCliente(cliente);
-        locacao.setFuncionario(funcionario);
-        locacao.setPagamento(pagamento);
-        locacao.setArtigoLocados(listaArtigo);
-        controller.cadastrarLocacao(locacao);
-        return true;
+    public void mostrarMensagem(String mensagem, String titulo){
+        JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.PLAIN_MESSAGE);
     }
+    
+    public void mostrarMensagem(String mensagem, int messageType){
+        JOptionPane.showMessageDialog(this, mensagem, "Resultado", messageType);
+    }
+    
+    public void mostrarMensagem(String mensagem, String titulo, int messageType){
+        JOptionPane.showMessageDialog(this, mensagem, titulo, messageType);
+    }
+
+
 
     public SisLoc getController(){
         return controller;
-    }
-
-    public void mostrarClienteEFuncionario() {
-        mostrarMensagem(String.format("Cliente = %s\nFuncionário = %s", cliente.getNome(), funcionario.getNome()));
-    }
-
-    public void mostrarLocacao(){
-        mostrarMensagem(String.format("Locado com sucesso!\nId = %d\nReservado em = %s\nInicio em = %s\nFim em = %s\nEndereco = %s\n",
-            locacao.getId(),
-            locacao.getDataReservada(),
-            locacao.getInicio(),
-            locacao.getFim(),
-            locacao.getEndereco()
-        ));
     }
 }

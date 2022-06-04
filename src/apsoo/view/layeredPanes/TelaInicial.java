@@ -55,11 +55,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().getClienteFuncionario()){
-                    janela.nextScreen();
-                } else {
-                    janela.mostrarMensagem("Usuário ou Funcionário não encontrado!");
-                }
+                if(janela.getController().buscarCliente()){ janela.nextScreen(); }
             }
         });
 
@@ -72,8 +68,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.dispatchEvent(new WindowEvent(janela, WindowEvent.WINDOW_CLOSING));  
-                janela.previousScreen();
+                janela.fecharJanela();
             }
         });
 
@@ -91,21 +86,19 @@ public class TelaInicial extends AJanelaLayer {
     }
 
     public String getClienteCpf(){
-        String cpf = null;
-
-        try { cpf = ((JTextFieldPlaceholder) components.get("clienteCPF")).getText(); }
-        catch (Exception e) { e.printStackTrace(); }
-        
-        return cpf;
+        return ((JTextFieldPlaceholder) components.get("clienteCPF")).getText();
     }
 
     public String getFuncionarioCpf(){
-        String cpf = null;
+        return ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText();
+    }
 
-        try { cpf = ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText(); }
-        catch (Exception e) { System.out.println("Não foi possível criar uma instância de cliente! Retornando null"); }
-        
-        return cpf;
+    public void setClienteCpf(String text){
+        ((JTextFieldPlaceholder) components.get("clienteCPF")).setText(text);
+    }
+
+    public void setFuncionarioCpf(String text){
+        ((JTextFieldPlaceholder) components.get("funcionarioCPF")).setText(text);
     }
 
     public void updateTela(){

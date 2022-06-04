@@ -9,11 +9,9 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.TreeMap;
 import java.util.Map;
 
-import apsoo.model.Pagamento;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextAreaPlaceholder;
@@ -21,10 +19,11 @@ import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class RegistroPagamento extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private Map<String, JComponent> components;
 
     public RegistroPagamento(Janela janela){
         this.janela = janela;
+        components = new TreeMap<String, JComponent>();
         initializeComponents();
     }
 
@@ -60,16 +59,7 @@ public class RegistroPagamento extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                boolean pagamentoPreenchdio = janela.getPagamento();
-                if(pagamentoPreenchdio){
-                    if(janela.realizarLocacao()){
-                        janela.mostrarLocacao();
-                    } else {
-                        janela.mostrarMensagem("Erro ao cadastrar locação");
-                    }
-                } else {
-                    janela.mostrarMensagem("Preencha todos os campos");
-                }
+                if (janela.getController().realizarLocacao()) { janela.resetar(); };
             }
         });
 
@@ -91,27 +81,13 @@ public class RegistroPagamento extends AJanelaLayer {
         }
     }
 
-    public Pagamento getPagamento(){
-        Pagamento pagamento = null;
-        try {
-            pagamento = new Pagamento(
-                Integer.parseInt(((JTextFieldPlaceholder) components.get("numeroPagamento")).getText()),
-                ((JTextFieldPlaceholder) components.get("formaPagamento")).getText(),
-                ((JTextFieldPlaceholder) components.get("infoAdicional")).getText()
-                );
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de pagamento! Retornando null");
-        }
-        return pagamento;
-    }
-
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
     }
 
-    public int getIdPagamento() {
-        return Integer.parseInt(((JTextFieldPlaceholder) components.get("numeroPagamento")).getText());
+    public String getIdPagamento() {
+        return ((JTextFieldPlaceholder) components.get("numeroPagamento")).getText();
     }
 
     public String getForma() {
@@ -120,5 +96,17 @@ public class RegistroPagamento extends AJanelaLayer {
 
     public String getInfo() {
         return ((JTextAreaPlaceholder) components.get("infoAdicional")).getText();
+    }
+    
+    public void setIdPagamento(String text) {
+        ((JTextFieldPlaceholder) components.get("numeroPagamento")).setText(text);
+    }
+
+    public void setForma(String text) {
+        ((JTextFieldPlaceholder) components.get("formaPagamento")).setText(text);
+    }
+
+    public void setInfo(String text) {
+        ((JTextAreaPlaceholder) components.get("infoAdicional")).setText(text);
     }
 }

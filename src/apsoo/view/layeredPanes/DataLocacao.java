@@ -4,13 +4,13 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
+import javax.swing.text.MaskFormatter;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.TreeMap;
 import java.util.Map;
 
@@ -20,10 +20,14 @@ import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class DataLocacao extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private Map<String, JComponent> components;
+    private MaskFormatter dateFormatter;
 
     public DataLocacao(Janela janela){
         this.janela = janela;
+        components = new TreeMap<String, JComponent>();
+        try { dateFormatter = new MaskFormatter("##/##/####"); }
+        catch (ParseException e) { e.printStackTrace(); }
         initializeComponents();
     }
 
@@ -59,8 +63,7 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.getController().salvarDatas();
-                janela.nextScreen();
+                if(janela.getController().getDatasEndereco()){ janela.nextScreen(); }
             }
         });
 
@@ -82,30 +85,32 @@ public class DataLocacao extends AJanelaLayer {
         }
     }
 
-    public Date getDataInicio(){
-        Date dataInicio = null;
-
-        try { dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime()); }
-        catch (Exception e) { System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null"); }
-        
-        return dataInicio;
+    public String getDataInicio(){
+        return ((JTextFieldPlaceholder) components.get("dataInicio")).getText();
     }
 
-    public Date getDataFim(){
-        Date dataFim = null;
+    public String getDataFim(){
+        return ((JTextFieldPlaceholder) components.get("dataFim")).getText();
+    }
+    
+    public String getEndereco() {
+        return ((JTextFieldPlaceholder) components.get("endereco")).getText();
+    }
 
-        try { dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime()); }
-        catch (Exception e) { e.printStackTrace(); }
+    public void setDataInicio(String text){
+        ((JTextFieldPlaceholder) components.get("dataInicio")).setText(text);
+    }
 
-        return dataFim;
+    public void setDataFim(String text){
+        ((JTextFieldPlaceholder) components.get("dataFim")).setText(text);
+    }
+    
+    public void setEndereco(String text) {
+        ((JTextFieldPlaceholder) components.get("endereco")).setText(text);
     }
 
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
-    }
-
-    public String getEndereco() {
-        return ((JTextFieldPlaceholder) components.get("endereco")).getText();
     }
 }
