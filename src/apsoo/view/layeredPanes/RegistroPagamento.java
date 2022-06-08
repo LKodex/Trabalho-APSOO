@@ -33,18 +33,33 @@ public class RegistroPagamento extends AJanelaLayer {
         components.get("lblRegistroPagamento").setBounds(465, 150, 350, 35);
         ((JLabel) components.get("lblRegistroPagamento")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblRegistroPagamento").setFont(new Font("Arial", Font.BOLD, 22));
-        
+
+        components.put("lblNumeroPagamento", new JLabel("Nº Identificador", SwingConstants.RIGHT));
+        components.get("lblNumeroPagamento").setBounds(100, 200, 350, 35);
+        ((JLabel) components.get("lblNumeroPagamento")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblNumeroPagamento").setFont(new Font("Arial", Font.PLAIN, 16));
+
         components.put("numeroPagamento", new JTextFieldPlaceholder("Nº Identificador do Pagamento"));
         components.get("numeroPagamento").setBounds(465, 200, 350, 35);
+
+        components.put("lblFormaPagamento", new JLabel("Forma de pagamento", SwingConstants.RIGHT));
+        components.get("lblFormaPagamento").setBounds(100, 250, 350, 35);
+        ((JLabel) components.get("lblFormaPagamento")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblFormaPagamento").setFont(new Font("Arial", Font.PLAIN, 16));
 
         components.put("formaPagamento", new JTextFieldPlaceholder("Forma de Pagamento"));
         components.get("formaPagamento").setBounds(465, 250, 350, 35);
         
+        components.put("lblInfoAdicional", new JLabel("Observações", SwingConstants.RIGHT));
+        components.get("lblInfoAdicional").setBounds(100, 300, 350, 35);
+        ((JLabel) components.get("lblInfoAdicional")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblInfoAdicional").setFont(new Font("Arial", Font.PLAIN, 16));
+
         components.put("infoAdicional", new JTextAreaPlaceholder("Informações adicionais"));
         components.get("infoAdicional").setBounds(465, 300, 350, 105);
 
         // Footer
-        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>&#0;</html>", 5, 5), SwingConstants.CENTER));
+        components.put("lblFooter", new JLabel(String.format("<html>Passo %d/%d<br/>Total: R$0.00</html>", 5, 5), SwingConstants.CENTER));
         components.get("lblFooter").setFont(new Font("Arial", Font.BOLD, 20));
         components.get("lblFooter").setBounds(0, janela.getHeight() - 159, janela.getWidth(), 120);
         components.get("lblFooter").setOpaque(true);
@@ -85,6 +100,8 @@ public class RegistroPagamento extends AJanelaLayer {
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
+
+        ((JLabel) components.get("lblFooter")).setText(String.format("<html>Passo %d/%d<br/>Total: R$%.2f</html>", 5, 5, janela.getController().getValorTotal()));
     }
 
     public String getIdPagamento() {

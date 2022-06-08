@@ -108,4 +108,15 @@ public class SisLoc {
         db.realizarLocacao(locacao);
         return true;
     }
+
+    public double getValorTotal() {
+        List<ArtigoLocado> artigos = janela.getArtigoLocados();
+        double valorTotal = 0;
+
+        for (ArtigoLocado artigoLocado : artigos) {
+            valorTotal += artigoLocado.getValorTotal();
+        }
+
+        return valorTotal;
+    }
 }
