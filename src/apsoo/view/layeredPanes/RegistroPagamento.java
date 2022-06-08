@@ -98,16 +98,4 @@ public class RegistroPagamento extends AJanelaLayer {
     public String getInfo() {
         return ((JTextAreaPlaceholder) components.get("infoAdicional")).getText();
     }
-    
-    public void setIdPagamento(String text) {
-        ((JTextFieldPlaceholder) components.get("numeroPagamento")).setText(text);
-    }
-
-    public void setForma(String text) {
-        ((JTextFieldPlaceholder) components.get("formaPagamento")).setText(text);
-    }
-
-    public void setInfo(String text) {
-        ((JTextAreaPlaceholder) components.get("infoAdicional")).setText(text);
-    }
 }

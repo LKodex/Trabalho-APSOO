@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-import java.sql.Date;
-
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
 import apsoo.controller.SisLoc;
@@ -19,12 +17,14 @@ import apsoo.view.layeredPanes.TelaInicial;
 public class Janela extends JFrame {
     private static final short WIDTH = 1280;
     private static final short HEIGHT = 720;
-    private short telaAtual = 0;
-    private List<AJanelaLayer> layeredPanes = new ArrayList<AJanelaLayer>();
+    private short telaAtual;
+    private List<AJanelaLayer> layeredPanes;
     private SisLoc controller;
 
     public Janela(){
         controller = new SisLoc(this);
+        telaAtual = 0;
+        layeredPanes = new ArrayList<AJanelaLayer>();
         initializeWindow();
         initializeLayeredPanes();
     }
@@ -135,19 +135,10 @@ public class Janela extends JFrame {
 
 
     public void resetar(){
-        ((TelaInicial) layeredPanes.get(0)).setClienteCpf("");
-        ((TelaInicial) layeredPanes.get(0)).setFuncionarioCpf("");
-        
-        ((DataLocacao) layeredPanes.get(1)).setDataInicio("");
-        ((DataLocacao) layeredPanes.get(1)).setDataFim("");
-        ((DataLocacao) layeredPanes.get(1)).setEndereco("");
-
-        ((RegistroPagamento) layeredPanes.get(4)).setIdPagamento("");
-        ((RegistroPagamento) layeredPanes.get(4)).setForma("");
-        ((RegistroPagamento) layeredPanes.get(4)).setInfo("");
-
         telaAtual = 0;
-        changeLayeredPane();
+
+        layeredPanes = new ArrayList<AJanelaLayer>();
+        initializeLayeredPanes();
     }
 
     public void fecharJanela(){

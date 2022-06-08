@@ -93,14 +93,6 @@ public class TelaInicial extends AJanelaLayer {
         return ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText();
     }
 
-    public void setClienteCpf(String text){
-        ((JTextFieldPlaceholder) components.get("clienteCPF")).setText(text);
-    }
-
-    public void setFuncionarioCpf(String text){
-        ((JTextFieldPlaceholder) components.get("funcionarioCPF")).setText(text);
-    }
-
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
