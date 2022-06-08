@@ -41,35 +41,30 @@ public class DataLocacao extends AJanelaLayer {
         components.get("lblDataLocacao").setBounds(465, 170, 350, 35);
         ((JLabel) components.get("lblDataLocacao")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblDataLocacao").setFont(new Font("Arial", Font.BOLD, 22));
-        
+
+        components.put("lblDataInicio", new JLabel("Data de Inicio", SwingConstants.RIGHT));
+        components.get("lblDataInicio").setBounds(100, 220, 350, 35);
+        ((JLabel) components.get("lblDataInicio")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblDataInicio").setFont(new Font("Arial", Font.PLAIN, 16));
+
         int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
         components.put("dataInicio", new JFormattedTextField(dateFormatter));
         components.get("dataInicio").setBounds(465, 220, 350, 35);
-        components.get("dataInicio").setForeground(Color.GRAY);
-        ((JFormattedTextField) components.get("dataInicio")).setText(String.format("3112%d", anoAtual));
-        ((JFormattedTextField) components.get("dataInicio")).addFocusListener(new FocusListener(){
-            @Override
-            public void focusGained(FocusEvent event){
-                if(event.getComponent().getForeground().equals(Color.GRAY)){ event.getComponent().setForeground(Color.BLACK); }
-            }
+        ((JFormattedTextField) components.get("dataInicio")).setText(String.format("31/12/%d", anoAtual));
 
-            @Override
-            public void focusLost(FocusEvent event){ return; }
-        });
+        components.put("lblDataFim", new JLabel("Data de Fim", SwingConstants.RIGHT));
+        components.get("lblDataFim").setBounds(100, 270, 350, 35);
+        ((JLabel) components.get("lblDataFim")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblDataFim").setFont(new Font("Arial", Font.PLAIN, 16));
 
         components.put("dataFim", new JFormattedTextField(dateFormatter));
         components.get("dataFim").setBounds(465, 270, 350, 35);
-        components.get("dataFim").setForeground(Color.GRAY);
-        ((JFormattedTextField) components.get("dataFim")).setText(String.format("3112%d", anoAtual));
-        ((JFormattedTextField) components.get("dataFim")).addFocusListener(new FocusListener(){
-            @Override
-            public void focusGained(FocusEvent event){
-                if(event.getComponent().getForeground().equals(Color.GRAY)){ event.getComponent().setForeground(Color.BLACK); }
-            }
+        ((JFormattedTextField) components.get("dataFim")).setText(String.format("31/12/%d", anoAtual));
 
-            @Override
-            public void focusLost(FocusEvent event){ return; }
-        });
+        components.put("lblEndereco", new JLabel("Endereço", SwingConstants.RIGHT));
+        components.get("lblEndereco").setBounds(100, 320, 350, 35);
+        ((JLabel) components.get("lblEndereco")).setVerticalTextPosition(SwingConstants.CENTER);
+        components.get("lblEndereco").setFont(new Font("Arial", Font.PLAIN, 16));
 
         components.put("endereco", new JTextFieldPlaceholder("Endereço"));
         components.get("endereco").setBounds(465, 320, 350, 35);
