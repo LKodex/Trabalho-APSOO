@@ -54,7 +54,8 @@ public class SisLoc {
             dataInicio = new Date(dateFormatter.parse(janela.getDataInicio()).getTime());
             dataFim = new Date(dateFormatter.parse(janela.getDataFim()).getTime());
         } catch (ParseException e) {
-            e.printStackTrace();
+            janela.mostrarMensagem("Por favor digite uma data válida!");
+            return false;
         }
 
         String endereco = janela.getEndereco().strip();
