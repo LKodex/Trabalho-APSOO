@@ -1,21 +1,21 @@
 package apsoo.model;
 
 public class Pagamento {
-    private int id;
+    private String id;
     private String metodo;
     private String observacao;
 
-    public Pagamento(int id, String metodo, String observacao){
+    public Pagamento(String id, String metodo, String observacao){
         this.id = id;
         this.metodo = metodo;
         this.observacao = observacao;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

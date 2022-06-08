@@ -82,8 +82,9 @@ public class GerBD {
     }
     
     // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
-    public boolean inserirLocacao(Locacao locacao){
-        if(locacao.getInicio().after(locacao.getFim())){ return false; }
+    public int realizarLocacao(Locacao locacao){
+        int locacaoId = -1;
+        if(locacao.getInicio().after(locacao.getFim())){ return locacaoId; }
 
         List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
         Pagamento pagamento = locacao.getPagamento();
@@ -118,7 +119,7 @@ public class GerBD {
         for (ArtigoLocado artigoLocado : artigoLocados) {
             inserirArtigoLocado(locacao.getId(), artigoLocado);
         }
-        return true;
+        return locacaoId;
     }
 
     // Persiste uma instância de artigoLocado no banco de dados

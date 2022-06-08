@@ -107,5 +107,32 @@ public class MenuArtigos extends AJanelaLayer {
         }
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
+        
+        artigoLista = janela.getController().consultarArtigosDisponiveis();
+
+
+        // Remove elementos da tela
+        for(JCheckBox jCheckBox : artigosCheckBox){ remove(jCheckBox); }
+
+        // Cria novas listas vazias
+        artigosCheckBox = new ArrayList<JCheckBox>();
+
+        for (Artigo artigo : artigoLista) {
+            artigosCheckBox.add(new JCheckBox(String.format("%d | %s | R$%.2f | Qntd: %d", artigo.getCodigo(), artigo.getNome(), artigo.getValorDiaria(), artigo.getEstoqueTotal())));
+        }
+        
+        for (int i = 0; i < artigoLista.size(); i++) {
+            artigosCheckBox.get(i).setBounds(120 + 350 * (i / 8), 120 + 50 * (i % 8), 300, 40);
+        }
+
+        // Adiciona componentes de listagem a tela
+        for(JCheckBox jCheckBox : artigosCheckBox){ add(jCheckBox); }
+
+        for(JCheckBox artigo : artigosCheckBox){
+            artigo.setVisible(false);
+            artigo.setVisible(true);
+        }
+        components.get("btnAnterior").setVisible(false);
+        components.get("btnAnterior").setVisible(true);
     }
 }

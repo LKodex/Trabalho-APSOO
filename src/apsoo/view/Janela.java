@@ -5,14 +5,8 @@ import java.util.List;
 
 import javax.swing.*;
 
-import java.sql.Date;
-
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
-import apsoo.model.Cliente;
-import apsoo.model.Funcionario;
-import apsoo.model.Locacao;
-import apsoo.model.Pagamento;
 import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
@@ -23,18 +17,14 @@ import apsoo.view.layeredPanes.TelaInicial;
 public class Janela extends JFrame {
     private static final short WIDTH = 1280;
     private static final short HEIGHT = 720;
-    private short telaAtual = 0;
-    private List<AJanelaLayer> layeredPanes = new ArrayList<AJanelaLayer>();
+    private short telaAtual;
+    private List<AJanelaLayer> layeredPanes;
     private SisLoc controller;
 
-    private Locacao locacao;
-    private Pagamento pagamento;
-    private List<ArtigoLocado> listaArtigo;
-    private Funcionario funcionario;
-    private Cliente cliente;
-
     public Janela(){
-        this.controller = new SisLoc();
+        controller = new SisLoc(this);
+        telaAtual = 0;
+        layeredPanes = new ArrayList<AJanelaLayer>();
         initializeWindow();
         initializeLayeredPanes();
     }
@@ -90,110 +80,90 @@ public class Janela extends JFrame {
     private void changeLayeredPane(){
         layeredPanes.get(telaAtual).setVisible(false);
         setLayeredPane(layeredPanes.get(telaAtual));
-        layeredPanes.get(telaAtual).setVisible(true);
         layeredPanes.get(telaAtual).updateTela();
+        layeredPanes.get(telaAtual).setVisible(true);
     }
 
-    public int getWidth(){
-        return WIDTH;
-    }
-
-    public int getHeight(){
-        return HEIGHT;
-    }
-
-    public int getTelaAtual(){
-        return telaAtual;
-    }
+    public int getWidth(){ return WIDTH; }
+    public int getHeight(){ return HEIGHT; }
+    public int getTelaAtual(){ return telaAtual; }
 
     // Passo 1/5
-    public boolean getClienteFuncionario(){
-        cliente = null;
-        funcionario = null;
+    public String getClienteCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getClienteCpf();
+    }
 
-        cliente = controller.buscarCliente(((TelaInicial) layeredPanes.get(0)).getClienteCpf());
-        funcionario = controller.buscarFuncionario(((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf());
-
-        return cliente != null && funcionario != null;
+    public String getFuncionarioCpf(){
+        return ((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf();
     }
 
     // Passo 2/5
-    public boolean getDatasEndereco(){
-        locacao = null;
-        Date dataInicio = ((DataLocacao) layeredPanes.get(1)).getDataInicio();
-        Date dataFim = ((DataLocacao) layeredPanes.get(1)).getDataFim();
-        locacao = new Locacao(
-            dataInicio,
-            dataFim,
-            ((DataLocacao) layeredPanes.get(1)).getEndereco()
-            );
-        return locacao != null && dataInicio.before(dataFim);
+    public String getDataInicio(){
+        return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+    }
+
+    public String getDataFim(){
+        return ((DataLocacao) layeredPanes.get(1)).getDataFim();
+    }
+
+    public String getEndereco(){
+        return ((DataLocacao) layeredPanes.get(1)).getEndereco();
+    }
+
+    // Passo 3/5
+    public List<Artigo> getArtigosSelecionados(){
+        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
     }
 
     // Passo 4/5
-    public boolean getArtigoLocados(){
-        listaArtigo = ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
-        if (listaArtigo.size() <= 0) {
-            listaArtigo = null;
-            return false;
-        }
-        return true;
-    }
-
-    public boolean getPagamento(){
-        pagamento = null;
-        pagamento = new Pagamento(
-            ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento(),
-            ((RegistroPagamento) layeredPanes.get(4)).getForma(),
-            ((RegistroPagamento) layeredPanes.get(4)).getInfo()
-        );
-        return pagamento != null;
-    }
-
-    public List<ArtigoLocado> getListaArtigo(){
+    public List<ArtigoLocado> getArtigoLocados(){
         return ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
     }
 
-    public List<Artigo> getArtigosSelecionados(){
-        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
+    // Passo 5/5
+    public String getPagamentoId(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento();
+    }
+
+    public String getPagamentoForma(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getForma();
+    }
+
+    public String getPagamentoInfo(){
+        return ((RegistroPagamento) layeredPanes.get(4)).getInfo();
+    }
+
+
+    public void resetar(){
+        telaAtual = 0;
+
+        layeredPanes = new ArrayList<AJanelaLayer>();
+        initializeLayeredPanes();
+    }
+
+    public void fecharJanela(){
+        dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
     }
 
     public void mostrarMensagem(String mensagem){
         JOptionPane.showMessageDialog(this, mensagem, "Resultado", JOptionPane.PLAIN_MESSAGE);
     }
 
-    public Date getDataInicio(){
-        return new Date(locacao.getInicio().getTime());
+    public void mostrarMensagem(String mensagem, String titulo){
+        JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.PLAIN_MESSAGE);
+    }
+    
+    public void mostrarMensagem(String mensagem, int messageType){
+        JOptionPane.showMessageDialog(this, mensagem, "Resultado", messageType);
+    }
+    
+    public void mostrarMensagem(String mensagem, String titulo, int messageType){
+        JOptionPane.showMessageDialog(this, mensagem, titulo, messageType);
     }
 
-    public Date getDataFim(){
-        return new Date(locacao.getFim().getTime());
-    }
 
-    public boolean realizarLocacao(){
-        locacao.setCliente(cliente);
-        locacao.setFuncionario(funcionario);
-        locacao.setPagamento(pagamento);
-        locacao.setArtigoLocados(listaArtigo);
-        controller.cadastrarLocacao(locacao);
-        return true;
-    }
 
     public SisLoc getController(){
         return controller;
-    }
-
-    public void mostrarClienteEFuncionario() {
-        mostrarMensagem(String.format("Cliente = %s\nFuncionário = %s", cliente.getNome(), funcionario.getNome()));
-    }
-
-    public void mostrarLocacao(){
-        mostrarMensagem(String.format("Locado com sucesso!\nId = %d\nReservado em = %s\nInicio em = %s\nFim em = %s\nEndereco = %s\n",
-            locacao.getId(),
-            locacao.getDataReservada(),
-            locacao.getInicio(),
-            locacao.getFim(),
-            locacao.getEndereco()
-        ));
     }
 }

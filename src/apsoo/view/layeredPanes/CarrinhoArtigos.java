@@ -21,14 +21,16 @@ import apsoo.view.Janela;
 import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class CarrinhoArtigos extends AJanelaLayer {
-    private Janela janela;
-    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
-    private List<Artigo> artigoLista = new ArrayList<Artigo>();
-    private List<JLabel> artigosLabel = new ArrayList<JLabel>();
-    private List<JTextFieldPlaceholder> artigosInput = new ArrayList<JTextFieldPlaceholder>();
+    private Janela                      janela;
+    private Map<String, JComponent>     components;
+    private List<JLabel>                artigosLabel;
+    private List<JTextFieldPlaceholder> artigosInput;
 
     public CarrinhoArtigos(Janela janela){
-        this.janela = janela;
+        components      =   new TreeMap<String, JComponent>();
+        artigosLabel    =   new ArrayList<JLabel>();
+        artigosInput    =   new ArrayList<JTextFieldPlaceholder>();
+        this.janela     =   janela;
         initializeComponents();
     }
 
@@ -55,11 +57,7 @@ public class CarrinhoArtigos extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getArtigoLocados()){
-                    janela.nextScreen();
-                } else {
-                    janela.mostrarMensagem("Houve um erro :)");
-                }
+                if(janela.getController().getArtigoLocados()){ janela.nextScreen(); }
             }
         });
 
@@ -82,6 +80,8 @@ public class CarrinhoArtigos extends AJanelaLayer {
     }
 
     public List<ArtigoLocado> getArtigosLocados(){
+        List<Artigo> artigoLista = janela.getArtigosSelecionados();
+
         List<ArtigoLocado> artigosLocados = new ArrayList<ArtigoLocado>();
         int daquelejeitao = 0;
         for (Artigo artigo : artigoLista) {
@@ -93,14 +93,13 @@ public class CarrinhoArtigos extends AJanelaLayer {
     }
 
     public void updateTela(){
-        // Recupera lista de artigos selecionados
-        artigoLista = janela.getArtigosSelecionados();
-
-        // Remove elementos da tela
+        List<Artigo> artigoLista = janela.getArtigosSelecionados();
+        
+        // Remove elementos antigos da tela
         for(JLabel jLabel : artigosLabel){ remove(jLabel); }
         for(JTextFieldPlaceholder jPlaceholder : artigosInput){ remove(jPlaceholder); }
 
-        // Cria novas listas vazias
+        // Redefine as listas de componentes
         artigosLabel = new ArrayList<JLabel>();
         artigosInput = new ArrayList<JTextFieldPlaceholder>();
 
@@ -130,3 +129,6 @@ public class CarrinhoArtigos extends AJanelaLayer {
         components.get("btnAnterior").setVisible(true);
     }
 }
+
+
+    

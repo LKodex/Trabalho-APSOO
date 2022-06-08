@@ -55,12 +55,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getClienteFuncionario()){
-                    janela.nextScreen();
-                    janela.mostrarClienteEFuncionario();
-                } else {
-                    janela.mostrarMensagem("Usuário ou Funcionário não encontrado!");
-                }
+                if(janela.getController().buscarCliente()){ janela.nextScreen(); }
             }
         });
 
@@ -73,8 +68,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.dispatchEvent(new WindowEvent(janela, WindowEvent.WINDOW_CLOSING));  
-                janela.previousScreen();
+                janela.fecharJanela();
             }
         });
 
@@ -92,23 +86,11 @@ public class TelaInicial extends AJanelaLayer {
     }
 
     public String getClienteCpf(){
-        String cpf = null;
-        try {
-            cpf = ((JTextFieldPlaceholder) components.get("clienteCPF")).getText().replaceAll("[^0-9]", "");
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
-        }
-        return cpf;
+        return ((JTextFieldPlaceholder) components.get("clienteCPF")).getText();
     }
 
     public String getFuncionarioCpf(){
-        String cpf = null;
-        try {
-            cpf = ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText().replaceAll("[^0-9]", "");
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de cliente! Retornando null");
-        }
-        return cpf;
+        return ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText();
     }
 
     public void updateTela(){

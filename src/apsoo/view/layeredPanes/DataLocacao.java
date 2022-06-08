@@ -3,15 +3,19 @@ package apsoo.view.layeredPanes;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
+import javax.swing.text.MaskFormatter;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.text.ParseException;
 import java.util.TreeMap;
+import java.util.Calendar;
 import java.util.Map;
 
 import apsoo.view.AJanelaLayer;
@@ -20,10 +24,15 @@ import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class DataLocacao extends AJanelaLayer {
     private Janela janela;
-    private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private Map<String, JComponent> components;
+    private MaskFormatter dateFormatter;
 
     public DataLocacao(Janela janela){
         this.janela = janela;
+        try { dateFormatter = new MaskFormatter("##/##/####"); }
+        catch (ParseException e) { e.printStackTrace(); }
+        components = new TreeMap<String, JComponent>();
+
         initializeComponents();
     }
 
@@ -33,11 +42,34 @@ public class DataLocacao extends AJanelaLayer {
         ((JLabel) components.get("lblDataLocacao")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblDataLocacao").setFont(new Font("Arial", Font.BOLD, 22));
         
-        components.put("dataInicio", new JTextFieldPlaceholder("Data de Inicio (dd-MM-AAAA)"));
+        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+        components.put("dataInicio", new JFormattedTextField(dateFormatter));
         components.get("dataInicio").setBounds(465, 220, 350, 35);
+        components.get("dataInicio").setForeground(Color.GRAY);
+        ((JFormattedTextField) components.get("dataInicio")).setText(String.format("3112%d", anoAtual));
+        ((JFormattedTextField) components.get("dataInicio")).addFocusListener(new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent event){
+                if(event.getComponent().getForeground().equals(Color.GRAY)){ event.getComponent().setForeground(Color.BLACK); }
+            }
 
-        components.put("dataFim", new JTextFieldPlaceholder("Data de Fim (dd-MM-AAAA)"));
+            @Override
+            public void focusLost(FocusEvent event){ return; }
+        });
+
+        components.put("dataFim", new JFormattedTextField(dateFormatter));
         components.get("dataFim").setBounds(465, 270, 350, 35);
+        components.get("dataFim").setForeground(Color.GRAY);
+        ((JFormattedTextField) components.get("dataFim")).setText(String.format("3112%d", anoAtual));
+        ((JFormattedTextField) components.get("dataFim")).addFocusListener(new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent event){
+                if(event.getComponent().getForeground().equals(Color.GRAY)){ event.getComponent().setForeground(Color.BLACK); }
+            }
+
+            @Override
+            public void focusLost(FocusEvent event){ return; }
+        });
 
         components.put("endereco", new JTextFieldPlaceholder("Endereço"));
         components.get("endereco").setBounds(465, 320, 350, 35);
@@ -59,11 +91,7 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getDatasEndereco()){
-                    janela.nextScreen();
-                } else {
-                    janela.mostrarMensagem("Algo deu errado! Por favor preencha todos os campos e insira uma data de inicio anterior á final");
-                }
+                if(janela.getController().getDatasEndereco()){ janela.nextScreen(); }
             }
         });
 
@@ -85,32 +113,20 @@ public class DataLocacao extends AJanelaLayer {
         }
     }
 
-    public Date getDataInicio(){
-        Date dataInicio = null;
-        try {
-            dataInicio = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataInicio")).getText()).getTime());
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de data do inicio! Retornando null");
-        }
-        return dataInicio;
+    public String getDataInicio(){
+        return ((JFormattedTextField) components.get("dataInicio")).getText();
     }
 
-    public Date getDataFim(){
-        Date dataFim = null;
-        try {
-            dataFim = new Date(new SimpleDateFormat("dd-MM-yyyy").parse(((JTextFieldPlaceholder) components.get("dataFim")).getText()).getTime());
-        } catch (Exception e) {
-            System.out.println("Não foi possível criar uma instância de data do fim! Retornando null");
-        }
-        return dataFim;
+    public String getDataFim(){
+        return ((JFormattedTextField) components.get("dataFim")).getText();
+    }
+    
+    public String getEndereco() {
+        return ((JTextFieldPlaceholder) components.get("endereco")).getText();
     }
 
     public void updateTela(){
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
-    }
-
-    public String getEndereco() {
-        return ((JTextFieldPlaceholder) components.get("endereco")).getText();
     }
 }
