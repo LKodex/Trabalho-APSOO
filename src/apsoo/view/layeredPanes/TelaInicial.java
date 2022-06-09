@@ -91,11 +91,11 @@ public class TelaInicial extends AJanelaLayer {
     }
 
     public String getClienteCpf(){
-        return ((JTextFieldPlaceholder) components.get("clienteCPF")).getText();
+        return ((JFormattedTextField) components.get("clienteCPF")).getText();
     }
 
     public String getFuncionarioCpf(){
-        return ((JTextFieldPlaceholder) components.get("funcionarioCPF")).getText();
+        return ((JFormattedTextField) components.get("funcionarioCPF")).getText();
     }
 
     public void updateTela(){
