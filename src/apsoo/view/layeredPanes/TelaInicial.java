@@ -3,14 +3,16 @@ package apsoo.view.layeredPanes;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.SwingConstants;
+import javax.swing.text.MaskFormatter;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
+import java.text.ParseException;
 import java.util.TreeMap;
 import java.util.Map;
 
@@ -21,9 +23,12 @@ import apsoo.view.extensions.JTextFieldPlaceholder;
 public class TelaInicial extends AJanelaLayer {
     private Janela janela;
     private Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    private MaskFormatter cpfFormatter;
 
     public TelaInicial(Janela janela){
         this.janela = janela;
+        try { cpfFormatter = new MaskFormatter("###.###.###-##"); }
+        catch (ParseException e) { e.printStackTrace(); }
         initializeComponents();
     }
 
@@ -33,18 +38,18 @@ public class TelaInicial extends AJanelaLayer {
         ((JLabel) components.get("lblClienteCPF")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblClienteCPF").setFont(new Font("Arial", Font.BOLD, 22));
         
-        components.put("clienteCPF", new JTextFieldPlaceholder("CPF..."));
+        components.put("clienteCPF", new JFormattedTextField(cpfFormatter));
         components.get("clienteCPF").setBounds(465, 220, 350, 35);
+        ((JFormattedTextField) components.get("clienteCPF")).setText("000.000.000-00");
 
         components.put("lblFuncionarioCPF", new JLabel("CPF do Funcionario Atendente", SwingConstants.CENTER));
         components.get("lblFuncionarioCPF").setBounds(465, 310, 350, 35);
         ((JLabel) components.get("lblFuncionarioCPF")).setVerticalTextPosition(SwingConstants.CENTER);
         components.get("lblFuncionarioCPF").setFont(new Font("Arial", Font.BOLD, 22));
 
-        components.put("funcionarioCPF", new JTextFieldPlaceholder("CPF..."));
+        components.put("funcionarioCPF", new JFormattedTextField(cpfFormatter));
         components.get("funcionarioCPF").setBounds(465, 360, 350, 35);
-
-        
+        ((JFormattedTextField) components.get("funcionarioCPF")).setText("000.000.000-00");
 
         // Botão Continuar
         components.put("btnProximo", new JButton("CONTINUAR"));
