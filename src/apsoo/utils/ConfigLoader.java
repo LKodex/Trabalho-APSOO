@@ -15,7 +15,7 @@ public class ConfigLoader {
 
     private ConfigLoader() {
         setDefaultConfigProperties();
-        readConfigFile();
+        readConfigFileAndStore();
     }
 
     /**
@@ -27,9 +27,9 @@ public class ConfigLoader {
     }
 
     /**
-     * Lê o arquivo config.properties e salva nas properties
+     * Lê o arquivo config.properties, salva nas properties e guarda as configurações no arquivo config.properties
      */
-    private void readConfigFile(){
+    private void readConfigFileAndStore(){
         try {
             FileReader reader = new FileReader(configFileName);
             properties.load(reader);
