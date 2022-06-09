@@ -63,16 +63,16 @@ CREATE TABLE IF NOT EXISTS Pagamento(
 	PRIMARY KEY (id, locId)
 );
 
-INSERT INTO Pessoa (cpf, nome) VALUES ('123','Marco');
-INSERT INTO Pessoa (cpf, nome) VALUES ('987','Lucas');
-INSERT INTO Pessoa (cpf, nome) VALUES ('234','Larryssa');
-INSERT INTO Pessoa (cpf, nome) VALUES ('876','Kélvisck');
+INSERT INTO Pessoa (cpf, nome) VALUES ('11111111111','Marco');
+INSERT INTO Pessoa (cpf, nome) VALUES ('22222222222','Lucas');
+INSERT INTO Pessoa (cpf, nome) VALUES ('99999999999','Larryssa');
+INSERT INTO Pessoa (cpf, nome) VALUES ('88888888888','Kélvisck');
 
-INSERT INTO Funcionario (cpf, senha) VALUES('123','senha123');
-INSERT INTO Funcionario (cpf, senha) VALUES('234','senha234');
+INSERT INTO Funcionario (cpf, senha) VALUES('11111111111','senha123');
+INSERT INTO Funcionario (cpf, senha) VALUES('22222222222','senha234');
 
-INSERT INTO Cliente (cpf, celular) VALUES('987','67987654321');
-INSERT INTO Cliente (cpf, celular) VALUES('876','67123456789');
+INSERT INTO Cliente (cpf, celular) VALUES('99999999999','67987654321');
+INSERT INTO Cliente (cpf, celular) VALUES('88888888888','67123456789');
 
 INSERT INTO Artigo(codigo, nomeArtigo, valorDiario, estoqueTotal) VALUES ('1','Pula Pula','250.0','25');
 INSERT INTO Artigo(codigo, nomeArtigo, valorDiario, estoqueTotal) VALUES ('2','Tobogã','150.0','15');
