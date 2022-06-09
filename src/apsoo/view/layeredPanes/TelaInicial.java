@@ -18,7 +18,6 @@ import java.util.Map;
 
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
-import apsoo.view.extensions.JTextFieldPlaceholder;
 
 public class TelaInicial extends AJanelaLayer {
     private Janela janela;
