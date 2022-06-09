@@ -126,16 +126,16 @@ public class Conexao {
             statement.execute("CREATE TABLE IF NOT EXISTS ArtigoLocado(id INT, codigo INT, quantidade INT, valorCotado FLOAT(53), valorTotal FLOAT(53), FOREIGN KEY(codigo) REFERENCES Artigo(codigo), FOREIGN KEY(id) REFERENCES Locacao(id), PRIMARY KEY (id,codigo));");
             statement.execute("CREATE TABLE IF NOT EXISTS Pagamento(id VARCHAR(255), locId INT, formaPagamento VARCHAR(255), info VARCHAR(255), FOREIGN KEY (locId) REFERENCES Locacao(id), PRIMARY KEY (id, locId));");
 
-            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('123','Marco');");
-            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('987','Lucas');");
-            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('234','Larryssa');");
-            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('876','Kélvisck');");
+            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('11111111111','Marco');");
+            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('22222222222','Lucas');");
+            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('99999999999','Larryssa');");
+            statement.execute("INSERT INTO Pessoa (cpf, nome) VALUES ('88888888888','Kélvisck');");
 
-            statement.execute("INSERT INTO Funcionario (cpf, senha) VALUES('123','senha123');");
-            statement.execute("INSERT INTO Funcionario (cpf, senha) VALUES('234','senha234');");
+            statement.execute("INSERT INTO Funcionario (cpf, senha) VALUES('11111111111','senha123');");
+            statement.execute("INSERT INTO Funcionario (cpf, senha) VALUES('99999999999','senha234');");
 
-            statement.execute("INSERT INTO Cliente (cpf, celular) VALUES('987','67987654321');");
-            statement.execute("INSERT INTO Cliente (cpf, celular) VALUES('876','67123456789');");
+            statement.execute("INSERT INTO Cliente (cpf, celular) VALUES('22222222222','67987654321');");
+            statement.execute("INSERT INTO Cliente (cpf, celular) VALUES('88888888888','67123456789');");
 
             statement.execute("INSERT INTO Artigo(codigo, nomeArtigo, valorDiario, estoqueTotal) VALUES ('1','Pula Pula','250.0','25');");
             statement.execute("INSERT INTO Artigo(codigo, nomeArtigo, valorDiario, estoqueTotal) VALUES ('2','Tobogã','150.0','15');");
