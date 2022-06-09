@@ -1,7 +1,6 @@
 package apsoo.database;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +24,16 @@ public class GerBD {
         return instance;
     }
 
+    /**
+     * Busca um cliente no banco de dados a partir de um CPF
+     * @param cpf - CPF do cliente já cadastrado
+     * @return Cliente - Caso seja encontrado retorna um cliente, caso contrário retorna null
+     */
     public Cliente buscarCliente(String cpf){
         ResultSet clienteResultSet = null;
         ResultSet pessoaResultSet = null;
         Cliente cliente = null;
+        cpf = cpf.replaceAll("[^0-9]", "");
 
         try {
             clienteResultSet = conexao.select(String.format("SELECT * FROM Cliente WHERE cpf = '%s'", cpf));
@@ -43,10 +48,16 @@ public class GerBD {
         return cliente;
     }
 
+    /**
+     * Busca um funcionário no banco de dados a partir de um CPF
+     * @param cpf - CPF do funcionário já cadastrado
+     * @return funcionário - Caso seja encontrado retorna um funcionário, caso contrário retorna null
+     */
     public Funcionario buscarFuncionario(String cpf) {
         ResultSet funcionarioResultSet = null;
         ResultSet pessoaResultSet = null;
         Funcionario funcionario = null;
+        cpf = cpf.replaceAll("[^0-9]", "");
 
         try {
             funcionarioResultSet = conexao.select(String.format("SELECT * FROM Funcionario WHERE cpf = '%s'", cpf));
@@ -61,6 +72,10 @@ public class GerBD {
         return funcionario;
     }
 
+    /**
+     * Busca e retorna a lista de todos os artigos cadastrados no banco de dados
+     * @return List<Artigo> - Lista de artigos cadastrados
+     */
     public List<Artigo> buscarArtigos(){
         List<Artigo> listaArtigos = new ArrayList<Artigo>();
         try {
@@ -81,10 +96,12 @@ public class GerBD {
         return listaArtigos;
     }
     
-    // Persiste uma instância de locação no banco de dados e retorna o id da locacao inserida
-    public int realizarLocacao(Locacao locacao){
-        int locacaoId = -1;
-        if(locacao.getInicio().after(locacao.getFim())){ return locacaoId; }
+    /**
+     * Insere uma nova locação no banco de dados incluindo o pagamento associado
+     * @param locacao - Instância de locação com todos atributos preenchidos
+     */
+    public void realizarLocacao(Locacao locacao){
+        if(locacao.getInicio().after(locacao.getFim())){ return; }
 
         List<ArtigoLocado> artigoLocados = locacao.getArtigoLocados();
         Pagamento pagamento = locacao.getPagamento();
@@ -107,7 +124,6 @@ public class GerBD {
             ));
 
             if(locIdRS.next()){
-                System.out.println(String.format("ID RS = \"%d\"", locIdRS.getInt("id")));
                 locacao.setId(locIdRS.getInt("id"));
             }
         } catch (Exception e) {
@@ -119,12 +135,15 @@ public class GerBD {
         for (ArtigoLocado artigoLocado : artigoLocados) {
             inserirArtigoLocado(locacao.getId(), artigoLocado);
         }
-        return locacaoId;
     }
 
-    // Persiste uma instância de artigoLocado no banco de dados
-    public boolean inserirArtigoLocado(int locacaoId, ArtigoLocado artigoLocado){
-        int resultado = conexao.insert(String.format("INSERT INTO ArtigoLocado (id, codigo, quantidade, valorCotado, valorTotal) VALUES ('%d', '%d', '%d', '%.2f', '%.2f')",
+    /**
+     * Insere um novo artigo locado no banco de dados associado a uma locação já cadastrada
+     * @param locacaoId - Id da locação associada
+     * @param artigoLocado - Artigo locado a ser registrado
+     */
+    public void inserirArtigoLocado(int locacaoId, ArtigoLocado artigoLocado){
+        conexao.insert(String.format("INSERT INTO ArtigoLocado (id, codigo, quantidade, valorCotado, valorTotal) VALUES ('%d', '%d', '%d', '%.2f', '%.2f')",
             locacaoId,
             artigoLocado.getCodigo(),
             artigoLocado.getQuantidade(),
@@ -132,34 +151,39 @@ public class GerBD {
             artigoLocado.getValorTotal()
         ));
         atualizarQuantidade(artigoLocado);
-        return resultado > 0;
     }
 
-    // Persiste uma instância de pagamento no banco de dados
-    public boolean inserirPagamento(int locacaoId, Pagamento pagamento){
-        int resultado = conexao.insert(String.format("INSERT INTO Pagamento (id, locId, formaPagamento, info) VALUES ('%s', '%d', '%s', '%s')",
+    /**
+     * Insere um novo pagamento no banco de dados associado a uma locação já cadastrada
+     * @param locacaoId - Id da locação associada
+     * @param pagamento - Pagamento a ser registrado
+     */
+    public void inserirPagamento(int locacaoId, Pagamento pagamento){
+        conexao.insert(String.format("INSERT INTO Pagamento (id, locId, formaPagamento, info) VALUES ('%s', '%d', '%s', '%s')",
             pagamento.getId(),
             locacaoId,
             pagamento.getMetodo(),
             pagamento.getObservacao()
         ));
-        return resultado > 0;
     }
 
-    public int atualizarQuantidade(ArtigoLocado artigoLocado){
+    /**
+     * Atualiza a quantidade do artigo relacionado ao artigo locado, diminuindo sua quantidade no banco de dados pela quantidade locada em artigo locado
+     * @param artigoLocado - Artigo locado relacionado ao artigo a ter a quantidade atualizada
+     */
+    public void atualizarQuantidade(ArtigoLocado artigoLocado){
         int quantidadeAtual;
         try {
-            quantidadeAtual = Integer.parseInt(conexao.select(String.format("SELECT estoqueTotal FROM Artigo WHERE codigo = '%d'",
-                artigoLocado.getCodigo()
-            )).getString("estoqueTotal"));
+            ResultSet artigoResultSet = conexao.select(String.format("SELECT estoqueTotal FROM Artigo WHERE codigo = '%d'", artigoLocado.getCodigo()));
+            quantidadeAtual = artigoResultSet.getInt("estoqueTotal");
 
-            return conexao.update(String.format("UPDATE Artigo SET estoqueTotal = '%d' WHERE codigo ='%d'",
+            // Atualiza o artigo relacionado ao artigo locado subtraindo a quantidade locada pela quantidade atual no banco de dados
+            conexao.update(String.format("UPDATE Artigo SET estoqueTotal = '%d' WHERE codigo ='%d'",
                 quantidadeAtual - artigoLocado.getQuantidade(),
                 artigoLocado.getCodigo()
             ));
         } catch (Exception e) {
-            System.out.println("Erro ao recuperar a quantidade de estoque de artigo!");
-            return -1;
+            e.printStackTrace();
         }
     }
 }

@@ -24,16 +24,14 @@ public class Conexao {
     private String databaseFolder;
 
     private Conexao(){
-        getAndCreateDatabaseFolder();
-        config=ConfigLoader.getIstance();
-        
-        url=String.format("jdbc:sqlite:%s/%s.db", databaseFolder.replaceAll("\\\\", "/"), config.get("DB_NAME").strip()).replaceAll("/", "\\\\");
-        password=config.get("DB_PASS");
-        username=config.get("DB_USER");
+        config   = ConfigLoader.getIstance();
+        password = config.get("DB_PASS");
+        username = config.get("DB_USER");
 
-        try{
-            connection = DriverManager.getConnection(url, username, password);
-        }
+        getAndCreateDatabaseFolder();
+        url = String.format("jdbc:sqlite:%s/%s.db", databaseFolder.replaceAll("\\\\", "/"), config.get("DB_NAME").strip()).replaceAll("/", "\\\\");
+
+        try{ connection = DriverManager.getConnection(url, username, password); }
         catch(SQLException e){
             System.out.println("Erro ao abrir o banco de dados sqlite");
             e.printStackTrace();
@@ -42,11 +40,17 @@ public class Conexao {
         resetarBD();
     }
 
+    /**
+     * @return Conexao - Retorna a instancia singleton
+     */
     public static Conexao getInstance(){
         if(instance == null) instance = new Conexao();
         return instance;
     }
 
+    /**
+     * Cria e/ou busca o caminho relativo ao executável para a pasta database utilizada para armazenar o arquivo de banco de dados SQLite
+     */
     private void getAndCreateDatabaseFolder(){
         try {
             databaseFolder = URLDecoder.decode(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent() + "\\database", "UTF-8");
@@ -55,9 +59,8 @@ public class Conexao {
             if(!databaseDir.exists()){
                 databaseDir.mkdir();
             }
-        } catch (UnsupportedEncodingException | URISyntaxException e) {
-            e.printStackTrace();
         }
+        catch (UnsupportedEncodingException | URISyntaxException e) { e.printStackTrace(); }
     }
 
     public int insert(String sqlCommand){
@@ -66,9 +69,7 @@ public class Conexao {
             Statement statement = connection.createStatement();
             result = statement.executeUpdate(sqlCommand);
         }
-        catch(SQLException e){
-            System.out.println("Erro ao executar comando SQL de Inserção! Retornando -1");
-        }
+        catch(SQLException e){ e.printStackTrace(); }
         return result;
     }
 
@@ -77,10 +78,8 @@ public class Conexao {
         try {
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlCommand);
-        } catch (SQLException e) {
-            System.out.println("Erro ao executar comando SQL de Seleção! Retornando null");
-            e.printStackTrace();
         }
+        catch (SQLException e) { e.printStackTrace(); }
         return resultSet;
     }
 
@@ -90,9 +89,7 @@ public class Conexao {
             Statement statement = connection.createStatement();
             result = statement.executeUpdate(sqlCommand);
         }
-        catch(SQLException e){
-            System.out.println("Erro ao executar comando SQL de Atualização! Retornando -1");
-        }
+        catch(SQLException e){ e.printStackTrace(); }
         return result;
     }
 
@@ -102,12 +99,13 @@ public class Conexao {
             Statement statement = connection.createStatement();
             result = statement.executeUpdate(sqlCommand);
         }
-        catch(SQLException e){
-            System.out.println("Erro ao executar comando SQL de Deleção! Retornando -1");
-        }
+        catch(SQLException e){ e.printStackTrace(); }
         return result;
     }
 
+    /**
+     * Apaga todo o banco de dados e recria com alguns dados por padrão. Deve ser removido da versão final
+     */
     public void resetarBD(){
         try {
             Statement statement = connection.createStatement();
