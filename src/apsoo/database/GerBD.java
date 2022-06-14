@@ -185,5 +185,17 @@ public class GerBD {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    public String inserirDevolução(Devolucao devolucao){
+        try {
+            ResultSet result;
+            result=con.select("SELECT * FROM Devolucao WHERE id = "+devolucao.getID());
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+    }
+    public String atualizarQuantidade(Artigo artigo){
+        String resultado;
+        resultado=con.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"' WHERE codigo ='"+artigo.getCodigo()+"'");
+        return resultado;
     }
 }

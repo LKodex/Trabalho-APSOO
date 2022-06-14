@@ -11,6 +11,12 @@ CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf CHARACTER(11) PRIMARY KEY,
 	nome VARCHAR(100)
 );
+CREATE TABLE Devolução(
+	id int PRIMARY KEY,
+	dataDevolucao date,
+	comentarios VARCHAR(255),
+	FOREIGN KEY(id)REFERENCES Locacao(id)
+)
 
 CREATE TABLE IF NOT EXISTS Cliente(
 	cpf CHARACTER(11) PRIMARY KEY,
