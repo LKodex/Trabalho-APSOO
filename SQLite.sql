@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf CHARACTER(11) PRIMARY KEY,
 	nome VARCHAR(100)
 );
-CREATE TABLE Devolução(
+CREATE TABLE Devolucao(
 	id int PRIMARY KEY,
 	dataDevolucao date,
 	comentarios VARCHAR(255),
