@@ -189,8 +189,6 @@ public class GerBD {
     }
     public void inserirDevolução(Devolucao devolucao){
         try {
-            ResultSet result;
-            result = conexao.select(String.format("SELECT * FROM Devolucao WHERE id = '%d'", devolucao.getId()));
             conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES '%d', %s, %s",
                 devolucao.getId(),
                 devolucao.getData(),
