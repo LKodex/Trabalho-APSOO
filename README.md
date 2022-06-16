@@ -45,6 +45,12 @@
  - dataReservada - Date - date  
  - endereco - String - varchar(255)  
 
+## `Devolucao`  
+### Atributos:  
+ - Id - int - int  
+ - dataDevolucao - Date - date  
+ - comentarios - String - varchar(255)  
+
 ## `Artigo`  
 ### Atributos:  
  - Codigo - int - int  
