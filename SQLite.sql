@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS Devolucao;
 DROP TABLE IF EXISTS Pagamento;
 DROP TABLE IF EXISTS ArtigoLocado;
 DROP TABLE IF EXISTS Locacao;
@@ -11,12 +11,6 @@ CREATE TABLE IF NOT EXISTS Pessoa(
 	cpf CHARACTER(11) PRIMARY KEY,
 	nome VARCHAR(100)
 );
-CREATE TABLE Devolucao(
-	id int PRIMARY KEY,
-	dataDevolucao date,
-	comentarios VARCHAR(255),
-	FOREIGN KEY(id)REFERENCES Locacao(id)
-)
 
 CREATE TABLE IF NOT EXISTS Cliente(
 	cpf CHARACTER(11) PRIMARY KEY,
@@ -41,6 +35,13 @@ CREATE TABLE IF NOT EXISTS Locacao(
 	FOREIGN KEY(cpfFuncionario) REFERENCES Funcionario(cpf),
 	FOREIGN KEY(cpfCliente) REFERENCES Cliente(cpf)
 );
+
+CREATE TABLE IF NOT EXISTS Devolucao(
+	id INT PRIMARY KEY,
+	dataDevolucao DATE,
+	comentarios VARCHAR(255),
+	FOREIGN KEY(id) REFERENCES Locacao(id)
+)
 
 CREATE TABLE IF NOT EXISTS Artigo(
 	codigo INT PRIMARY KEY,
