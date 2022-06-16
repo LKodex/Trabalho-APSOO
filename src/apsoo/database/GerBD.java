@@ -10,6 +10,7 @@ import apsoo.model.Cliente;
 import apsoo.model.Funcionario;
 import apsoo.model.Locacao;
 import apsoo.model.Pagamento;
+import apsoo.model.Devolucao;
 
 public class GerBD {
     private static GerBD instance;
@@ -185,5 +186,23 @@ public class GerBD {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void inserirDevolução(Devolucao devolucao){
+        try {
+            ResultSet result;
+            result = conexao.select(String.format("SELECT * FROM Devolucao WHERE id = '%d'", devolucao.getId()));
+            conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES '%d', %s, %s",
+                devolucao.getId(),
+                devolucao.getData(),
+                devolucao.getObservacao()
+                ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public int atualizarQuantidade(Artigo artigo){
+        int resultado;
+        resultado=conexao.update("Update artigo SET estoqueTotal = '"+artigo.getEstoqueTotal()+"' WHERE codigo ='"+artigo.getCodigo()+"'");
+        return resultado;
     }
 }
