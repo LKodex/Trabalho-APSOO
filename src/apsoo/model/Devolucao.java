@@ -8,7 +8,7 @@ public class Devolucao{
     private Date dataDevolucao;
     private String observacoes;
 
-    public Devolucao(int num,String obs){
+    public Devolucao(int num, String obs){
         this.dataDevolucao = new Date(Calendar.getInstance().getTimeInMillis());
         this.id=num;
         this.observacoes=obs;
@@ -18,24 +18,24 @@ public class Devolucao{
         return this.dataDevolucao;
     }
 
-    public void setData(){
-        this.dataDevolucao = new Date(Calendar.getInstance().getTimeInMillis());
+    public void setData(Date dataDevolucao){
+        this.dataDevolucao = dataDevolucao;
     }
 
-    public int getID(){
+    public int getId(){
         return this.id;
     }
 
-    public void setId(int newID){
-        this.id=newID;
+    public void setId(int id){
+        this.id = id;
     }
 
-    public String getObservacao () {
+    public String getObservacao() {
         return this.observacoes;
     }
 
-    public void setObservacao(String newObservacao) {
-        this.observacoes = newObservacao;
+    public void setObservacao(String observacoes) {
+        this.observacoes = observacoes;
     }
 
 }

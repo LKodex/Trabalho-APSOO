@@ -187,16 +187,17 @@ public class GerBD {
             e.printStackTrace();
         }
     }
-    public String inserirDevolução(Devolucao devolucao){
+    public void inserirDevolução(Devolucao devolucao){
         try {
             ResultSet result;
-            result=conexao.select("SELECT * FROM Devolucao WHERE id = '"+devolucao.getID()+"'");
-            conexao.update("INSERT INTO Devolucao (id,dataDevolucao,comentarios)VALUES '"
-            +devolucao.getID()+"', '"+devolucao.getData()+"', '"+devolucao.getObservacao()+"'"
-            );
-            return "Devolucao feita com sucesso";
+            result = conexao.select(String.format("SELECT * FROM Devolucao WHERE id = '%d'", devolucao.getId()));
+            conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES '%d', %s, %s",
+                devolucao.getId(),
+                devolucao.getData(),
+                devolucao.getObservacao()
+                ));
         } catch (Exception e) {
-            return "Ocorreu um erro na hora de inserir a devolucao";
+            e.printStackTrace();
         }
     }
     public int atualizarQuantidade(Artigo artigo){
