@@ -84,7 +84,7 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().getDatasEndereco()){ janela.nextScreen(); }
+                if(janela.getController().getDatasEndereco()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS); }
             }
         });
 
@@ -97,7 +97,7 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.previousScreen();
+                janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_TELA_INICIAL);
             }
         });
 
