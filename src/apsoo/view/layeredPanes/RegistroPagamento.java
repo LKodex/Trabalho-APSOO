@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextAreaPlaceholder;
@@ -75,7 +76,7 @@ public class RegistroPagamento extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if (janela.getController().realizarLocacao()) { janela.resetar(); };
+                if (((RealizarLocacaoController) janela.getController()).realizarLocacao()) { janela.resetar(); };
             }
         });
 
@@ -101,7 +102,7 @@ public class RegistroPagamento extends AJanelaLayer {
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
 
-        ((JLabel) components.get("lblFooter")).setText(String.format("<html>Passo %d/%d<br/>Total: R$%.2f</html>", 5, 5, janela.getController().getValorTotal()));
+        ((JLabel) components.get("lblFooter")).setText(String.format("<html>Passo %d/%d<br/>Total: R$%.2f</html>", 5, 5, ((RealizarLocacaoController) janela.getController()).getValorTotal()));
     }
 
     public String getIdPagamento() {

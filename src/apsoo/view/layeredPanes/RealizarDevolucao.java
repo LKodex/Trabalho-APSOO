@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.controller.RealizarDevolucaoController;
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextAreaPlaceholder;
@@ -66,7 +68,7 @@ public class RealizarDevolucao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if (janela.getController().realizarDevolucao()) { janela.resetar(); };
+                if (((RealizarDevolucaoController) janela.getController()).realizarDevolucao()) { janela.resetar(); };
             }
         });
 

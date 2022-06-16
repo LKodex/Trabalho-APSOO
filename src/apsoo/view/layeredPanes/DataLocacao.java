@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.Calendar;
 import java.util.Map;
 
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextFieldPlaceholder;
@@ -84,7 +85,7 @@ public class DataLocacao extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().getDatasEndereco()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS); }
+                if(((RealizarLocacaoController) janela.getController()).getDatasEndereco()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS); }
             }
         });
 

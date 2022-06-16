@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import apsoo.database.GerBD;
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
 import apsoo.model.Cliente;
@@ -14,15 +13,12 @@ import apsoo.model.Locacao;
 import apsoo.model.Pagamento;
 import apsoo.view.Janela;
 
-public class SisLoc {
-    private GerBD db;
+public class RealizarLocacaoController extends Controller {
     private Locacao locacao;
-    private Janela janela;
     private SimpleDateFormat dateFormatter;
 
-    public SisLoc(Janela janela){
-        this.janela = janela;
-        this.db = GerBD.getInstance();
+    public RealizarLocacaoController(Janela janela){
+        super(janela);
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
     }
 
@@ -108,11 +104,7 @@ public class SisLoc {
         db.realizarLocacao(locacao);
         return true;
     }
-
-    public boolean realizarDevolucao(){
-        return true;
-    }
-
+    
     public double getValorTotal() {
         List<ArtigoLocado> artigos = janela.getArtigoLocados();
         double valorTotal = 0;

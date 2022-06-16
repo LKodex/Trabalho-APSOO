@@ -43,7 +43,8 @@ public class SHA3 {
      * @return Boolean - Verdadeiro caso o input e o hash sejam iguais
      */
     public static Boolean compare(String input, String hash){
-        if(hash.length() != 256) return Boolean.FALSE;
+        final int HASH_256_STRING_LENGTH = 256;
+        if(hash.length() != HASH_256_STRING_LENGTH) return Boolean.FALSE;
         String inputHash = "";
         try {
             inputHash = SHA3.hash(input);

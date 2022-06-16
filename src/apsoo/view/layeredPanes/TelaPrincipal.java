@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.controller.RealizarDevolucaoController;
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 
@@ -35,6 +37,7 @@ public class TelaPrincipal extends AJanelaLayer {
         ((JButton) components.get("btnRealizarLocacao")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
+                janela.setController(new RealizarLocacaoController(janela));
                 janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_TELA_INICIAL);
             }
         });
@@ -48,6 +51,7 @@ public class TelaPrincipal extends AJanelaLayer {
         ((JButton) components.get("btnRegistrarDevolucao")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
+                janela.setController(new RealizarDevolucaoController(janela));
                 janela.changeLayeredPane(TelaDaJanela.REALIZAR_DEVOLUCAO_TELA_PRINCIPAL);
             }
         });
