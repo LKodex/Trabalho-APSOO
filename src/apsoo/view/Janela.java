@@ -8,7 +8,8 @@ import javax.swing.*;
 
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
-import apsoo.controller.SisLoc;
+import apsoo.controller.Controller;
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
 import apsoo.view.layeredPanes.MenuArtigos;
@@ -22,10 +23,10 @@ public class Janela extends JFrame {
     private static final short WIDTH = 1280;
     private static final short HEIGHT = 720;
     private Map<TelaDaJanela, AJanelaLayer> layeredPanes;
-    private SisLoc controller;
+    private Controller controller;
 
     public Janela(){
-        controller = new SisLoc(this);
+        controller = new RealizarLocacaoController(this);
         layeredPanes = new TreeMap<TelaDaJanela, AJanelaLayer>();
         initializeWindow();
         initializeLayeredPanes();
@@ -150,7 +151,11 @@ public class Janela extends JFrame {
         JOptionPane.showMessageDialog(this, mensagem, titulo, messageType);
     }
 
-    public SisLoc getController(){
+    public Controller getController(){
         return controller;
+    }
+
+    public void setController(Controller controller){
+        this.controller = controller;
     }
 }

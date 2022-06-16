@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.model.Artigo;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
@@ -27,7 +28,6 @@ public class MenuArtigos extends AJanelaLayer {
 
     public MenuArtigos(Janela janela){
         this.janela = janela;
-        artigoLista = janela.getController().consultarArtigosDisponiveis();
         initializeComponents();
     }
 
@@ -108,7 +108,7 @@ public class MenuArtigos extends AJanelaLayer {
         components.get("btnAnterior").setVisible(false);
         components.get("btnAnterior").setVisible(true);
         
-        artigoLista = janela.getController().consultarArtigosDisponiveis();
+        artigoLista = ((RealizarLocacaoController) janela.getController()).consultarArtigosDisponiveis();
 
 
         // Remove elementos da tela

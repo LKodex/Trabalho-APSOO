@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.TreeMap;
 import java.util.Map;
 
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 
@@ -59,7 +60,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().buscarCliente()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO); }
+                if(((RealizarLocacaoController) janela.getController()).buscarCliente()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO); }
             }
         });
 

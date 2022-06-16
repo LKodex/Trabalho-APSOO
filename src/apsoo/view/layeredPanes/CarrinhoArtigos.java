@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
+import apsoo.controller.RealizarLocacaoController;
 import apsoo.model.Artigo;
 import apsoo.model.ArtigoLocado;
 import apsoo.view.AJanelaLayer;
@@ -57,7 +58,7 @@ public class CarrinhoArtigos extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().getArtigoLocados()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO); }
+                if(((RealizarLocacaoController) janela.getController()).getArtigoLocados()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO); }
             }
         });
 
