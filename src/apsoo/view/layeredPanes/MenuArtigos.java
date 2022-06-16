@@ -62,7 +62,7 @@ public class MenuArtigos extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.nextScreen();
+                janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_CARRINHO_ARTIGOS);
             }
         });
 
@@ -75,7 +75,7 @@ public class MenuArtigos extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.previousScreen();
+                janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO);
             }
         });
 

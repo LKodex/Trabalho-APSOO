@@ -59,7 +59,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().buscarCliente()){ janela.nextScreen(); }
+                if(janela.getController().buscarCliente()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO); }
             }
         });
 
@@ -72,7 +72,7 @@ public class TelaInicial extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.fecharJanela();
+                janela.changeLayeredPane(TelaDaJanela.MENU_PRINCIPAL);
             }
         });
 

@@ -2,6 +2,8 @@ package apsoo.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.*;
 
@@ -11,20 +13,21 @@ import apsoo.controller.SisLoc;
 import apsoo.view.layeredPanes.CarrinhoArtigos;
 import apsoo.view.layeredPanes.DataLocacao;
 import apsoo.view.layeredPanes.MenuArtigos;
+import apsoo.view.layeredPanes.RealizarDevolucao;
 import apsoo.view.layeredPanes.RegistroPagamento;
+import apsoo.view.layeredPanes.TelaDaJanela;
 import apsoo.view.layeredPanes.TelaInicial;
+import apsoo.view.layeredPanes.TelaPrincipal;
 
 public class Janela extends JFrame {
     private static final short WIDTH = 1280;
     private static final short HEIGHT = 720;
-    private short telaAtual;
-    private List<AJanelaLayer> layeredPanes;
+    private Map<TelaDaJanela, AJanelaLayer> layeredPanes;
     private SisLoc controller;
 
     public Janela(){
         controller = new SisLoc(this);
-        telaAtual = 0;
-        layeredPanes = new ArrayList<AJanelaLayer>();
+        layeredPanes = new TreeMap<TelaDaJanela, AJanelaLayer>();
         initializeWindow();
         initializeLayeredPanes();
     }
@@ -47,97 +50,84 @@ public class Janela extends JFrame {
      * Após isso define o conteúdo atual da tela para o primeiro item da lista
      */
     private void initializeLayeredPanes(){
-        layeredPanes.add(new TelaInicial(this));        // 0
-        layeredPanes.add(new DataLocacao(this));        // 1
-        layeredPanes.add(new MenuArtigos(this));        // 2
-        layeredPanes.add(new CarrinhoArtigos(this));    // 3
-        layeredPanes.add(new RegistroPagamento(this));  // 4
+        layeredPanes.put(TelaDaJanela.MENU_PRINCIPAL, new TelaPrincipal(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_LOCACAO_TELA_INICIAL, new TelaInicial(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO, new DataLocacao(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS, new MenuArtigos(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_LOCACAO_CARRINHO_ARTIGOS, new CarrinhoArtigos(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO, new RegistroPagamento(this));
+        layeredPanes.put(TelaDaJanela.REALIZAR_DEVOLUCAO_TELA_PRINCIPAL, new RealizarDevolucao(this));
 
-        changeLayeredPane();
+        changeLayeredPane(TelaDaJanela.MENU_PRINCIPAL);
     }
-
-    /**
-     * Avança para a próxima tela na lista caso não esteja na última
-     */
-    public void nextScreen(){
-        if(telaAtual >= layeredPanes.size() - 1) return;
-        telaAtual++;
-        changeLayeredPane();
-    }
-
-    /**
-     * Retorna para a tela anterior caso não seja a primeira
-     */
-    public void previousScreen(){
-        if(telaAtual <= 0) return;
-        telaAtual--;
-        changeLayeredPane();
-    }
-
-    /**
-     * Atualiza a tela para a variável da posição do valor de telaAtual
-     */
-    private void changeLayeredPane(){
-        layeredPanes.get(telaAtual).setVisible(false);
-        setLayeredPane(layeredPanes.get(telaAtual));
-        layeredPanes.get(telaAtual).updateTela();
-        layeredPanes.get(telaAtual).setVisible(true);
+    
+    public void changeLayeredPane(TelaDaJanela telaDaJanela){
+        layeredPanes.get(telaDaJanela).setVisible(false);
+        setLayeredPane(layeredPanes.get(telaDaJanela));
+        layeredPanes.get(telaDaJanela).updateTela();
+        layeredPanes.get(telaDaJanela).setVisible(true);
     }
 
     public int getWidth(){ return WIDTH; }
     public int getHeight(){ return HEIGHT; }
-    public int getTelaAtual(){ return telaAtual; }
 
-    // Passo 1/5
+    // Realizar Locação - Passo 1/5
     public String getClienteCpf(){
-        return ((TelaInicial) layeredPanes.get(0)).getClienteCpf();
+        return ((TelaInicial) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_TELA_INICIAL)).getClienteCpf();
     }
 
     public String getFuncionarioCpf(){
-        return ((TelaInicial) layeredPanes.get(0)).getFuncionarioCpf();
+        return ((TelaInicial) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_TELA_INICIAL)).getFuncionarioCpf();
     }
 
-    // Passo 2/5
+    // Realizar Locação - Passo 2/5
     public String getDataInicio(){
-        return ((DataLocacao) layeredPanes.get(1)).getDataInicio();
+        return ((DataLocacao) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO)).getDataInicio();
     }
 
     public String getDataFim(){
-        return ((DataLocacao) layeredPanes.get(1)).getDataFim();
+        return ((DataLocacao) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO)).getDataFim();
     }
 
     public String getEndereco(){
-        return ((DataLocacao) layeredPanes.get(1)).getEndereco();
+        return ((DataLocacao) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_DATA_LOCACAO)).getEndereco();
     }
 
-    // Passo 3/5
+    // Realizar Locação - Passo 3/5
     public List<Artigo> getArtigosSelecionados(){
-        return ((MenuArtigos) layeredPanes.get(2)).getArtigosSelecionados();
+        return ((MenuArtigos) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS)).getArtigosSelecionados();
     }
 
-    // Passo 4/5
+    // Realizar Locação - Passo 4/5
     public List<ArtigoLocado> getArtigoLocados(){
-        return ((CarrinhoArtigos) layeredPanes.get(3)).getArtigosLocados();
+        return ((CarrinhoArtigos) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_CARRINHO_ARTIGOS)).getArtigosLocados();
     }
 
-    // Passo 5/5
+    // Realizar Locação - Passo 5/5
     public String getPagamentoId(){
-        return ((RegistroPagamento) layeredPanes.get(4)).getIdPagamento();
+        return ((RegistroPagamento) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO)).getIdPagamento();
     }
 
     public String getPagamentoForma(){
-        return ((RegistroPagamento) layeredPanes.get(4)).getForma();
+        return ((RegistroPagamento) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO)).getForma();
     }
 
     public String getPagamentoInfo(){
-        return ((RegistroPagamento) layeredPanes.get(4)).getInfo();
+        return ((RegistroPagamento) layeredPanes.get(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO)).getInfo();
+    }
+
+    // Realizar Devolução 1/1
+    public String getLocacaoId(){
+        return ((RealizarDevolucao) layeredPanes.get(TelaDaJanela.REALIZAR_DEVOLUCAO_TELA_PRINCIPAL)).getLocacaoId();
+    }
+
+    public String getDevolucaoObservacoes(){
+        return ((RealizarDevolucao) layeredPanes.get(TelaDaJanela.REALIZAR_DEVOLUCAO_TELA_PRINCIPAL)).getObservacoes();
     }
 
 
     public void resetar(){
-        telaAtual = 0;
-
-        layeredPanes = new ArrayList<AJanelaLayer>();
+        layeredPanes = new TreeMap<TelaDaJanela, AJanelaLayer>();
         initializeLayeredPanes();
     }
 
@@ -160,8 +150,6 @@ public class Janela extends JFrame {
     public void mostrarMensagem(String mensagem, String titulo, int messageType){
         JOptionPane.showMessageDialog(this, mensagem, titulo, messageType);
     }
-
-
 
     public SisLoc getController(){
         return controller;

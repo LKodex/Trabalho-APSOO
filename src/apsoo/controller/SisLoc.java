@@ -109,6 +109,10 @@ public class SisLoc {
         return true;
     }
 
+    public boolean realizarDevolucao(){
+        return true;
+    }
+
     public double getValorTotal() {
         List<ArtigoLocado> artigos = janela.getArtigoLocados();
         double valorTotal = 0;

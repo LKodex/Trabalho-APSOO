@@ -57,7 +57,7 @@ public class CarrinhoArtigos extends AJanelaLayer {
         ((JButton) components.get("btnProximo")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                if(janela.getController().getArtigoLocados()){ janela.nextScreen(); }
+                if(janela.getController().getArtigoLocados()){ janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_REGISTRO_PAGAMENTO); }
             }
         });
 
@@ -70,7 +70,7 @@ public class CarrinhoArtigos extends AJanelaLayer {
         ((JButton) components.get("btnAnterior")).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent event){
-                janela.previousScreen();
+                janela.changeLayeredPane(TelaDaJanela.REALIZAR_LOCACAO_MENU_ARTIGOS);
             }
         });
 
