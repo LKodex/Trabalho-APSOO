@@ -225,7 +225,7 @@ public class GerBD {
             e.printStackTrace();
         }
     }
-    public void inserirDevolução(Devolucao devolucao){
+    public void inserirDevolucao(Devolucao devolucao){
         try {
             conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES '%d', %s, %s",
                 devolucao.getId(),
