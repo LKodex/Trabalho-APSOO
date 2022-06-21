@@ -49,6 +49,44 @@ public class GerBD {
         return cliente;
     }
 
+    
+    public Locacao buscarLocacao(int newId) {
+    	ResultSet locacaoResultSet = null;
+    	Locacao locacao = null;
+    	
+    	try {
+    		locacaoResultSet = conexao.select(String.format("SELECT * FROM Locacao WHERE id = '%d'", newId));
+    		
+    		if(locacaoResultSet.next()) {
+    			locacao = new Locacao(newId);
+    		}
+    	} catch (Exception e) {;
+    		System.out.println("Não foi possível recuperar a locação do banco de dados! Retornando null");
+    	}
+    	
+    	return locacao;
+    }
+     
+    
+    public Devolucao buscarDevolucao(int newId) {
+    	ResultSet devolucaoResultSet = null;
+    	Devolucao devolucao = null;
+    	
+    	try {
+    		devolucaoResultSet = conexao.select(String.format("SELECT * FROM Devolucao WHERE id = '%d'", newId));
+    		
+    		if(devolucaoResultSet.next()) {
+    			devolucao = new Devolucao(newId, devolucaoResultSet.getString("observacoes"));
+    		}
+    		
+    	} catch(Exception e) {
+    		System.out.println("Não foi possível recuperar a Devolução do banco de dados! Retornando null");
+    	}
+    	
+    	return devolucao;
+    }
+    
+    
     /**
      * Busca um funcionário no banco de dados a partir de um CPF
      * @param cpf - CPF do funcionário já cadastrado
