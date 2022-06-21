@@ -18,6 +18,10 @@ public class Locacao {
     public Locacao(){
         dataReservada = new Date(Calendar.getInstance().getTimeInMillis());
     }
+    
+     public Locacao (int newId) {
+    	this.id = newId;
+    }
 
     public int getId(){
         return id;
