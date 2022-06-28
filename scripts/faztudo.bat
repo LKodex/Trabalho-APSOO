@@ -41,9 +41,7 @@ cd lib
 if not exist %TEMPD%\..\bin\config.properties copy %TEMPD%\..\configs\config.properties %TEMPD%\..\bin
 
 if not exist sqlite-jdbc-3.36.0.3.jar (
-    echo Downloading sqlite-jdbc-3.36.0.3.jar...
-    curl -o sqlite-jdbc-3.36.0.3.jar https://github.com/xerial/sqlite-jdbc/releases/download/3.36.0.3/sqlite-jdbc-3.36.0.3.jar
-    echo Downloaded sqlite-jdbc-3.36.0.3.jar.
+    echo sqlite-jdbc-3.36.0.3.jar not found! Please download at https://github.com/xerial/sqlite-jdbc/releases/download/3.36.0.3/sqlite-jdbc-3.36.0.3.jar
 )
 echo Dependency checked.
 

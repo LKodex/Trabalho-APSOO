@@ -27,11 +27,10 @@ public class RealizarDevolucaoController extends Controller {
         devolucaoRegistrada = db.buscarDevolucao(devolucao.getId());
 
         if(devolucaoRegistrada == null){
-            janela.mostrarMensagem(String.format("Já existe uma devolução registrada para a locação de id %d", devolucao.getId()), "Devolução já registrada");
-            return false;
+            db.inserirDevolucao(devolucao);
+            return true;
         }
-
-        db.inserirDevolucao(devolucao);
-        return true;
+        janela.mostrarMensagem(String.format("Já existe uma devolução registrada para a locação de id %d", devolucao.getId()), "Devolução já registrada");
+        return false;
     }
 }
