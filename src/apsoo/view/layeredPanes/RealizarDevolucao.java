@@ -13,7 +13,6 @@ import java.util.TreeMap;
 import java.util.Map;
 
 import apsoo.controller.RealizarDevolucaoController;
-import apsoo.controller.RealizarLocacaoController;
 import apsoo.view.AJanelaLayer;
 import apsoo.view.Janela;
 import apsoo.view.extensions.JTextAreaPlaceholder;
