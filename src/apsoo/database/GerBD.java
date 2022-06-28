@@ -227,7 +227,7 @@ public class GerBD {
     }
     public void inserirDevolucao(Devolucao devolucao){
         try {
-            conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES '%d', %s, %s",
+            conexao.update(String.format("INSERT INTO Devolucao (id, dataDevolucao, comentarios) VALUES ('%d', '%s', '%s')",
                 devolucao.getId(),
                 devolucao.getData(),
                 devolucao.getObservacao()
